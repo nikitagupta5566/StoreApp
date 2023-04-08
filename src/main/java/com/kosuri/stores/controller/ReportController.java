@@ -18,12 +18,12 @@ public class ReportController {
     @Autowired
     private ReportHandler reportHandler;
     @PostMapping("/generate/purchase")
-    public GeneratePurchaseReportResponse generatePurchaseReport(@Valid @RequestBody GeneratePurchaseReportRequest request) throws Exception{
+    public GeneratePurchaseReportResponse generatePurchaseReport(@Valid @RequestBody GeneratePurchaseReportRequest request) throws Exception {
         return reportHandler.generatePurchaseReport(request);
     }
 
     @PostMapping("/generate/sale")
-    public GenerateSaleReportResponse generateSaleReport(@Valid @RequestBody GenerateSaleReportRequest request) throws Exception{
+    public GenerateSaleReportResponse generateSaleReport(@Valid @RequestBody GenerateSaleReportRequest request) throws Exception {
         return reportHandler.generateSaleReport(request);
     }
 }
