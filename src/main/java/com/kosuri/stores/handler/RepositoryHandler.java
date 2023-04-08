@@ -20,8 +20,8 @@ public class RepositoryHandler {
     private StoreRepository storeRepository;
 
     public void addStoreToRepository(@Valid StoreEntity storeEntity){
-        long stores = storeRepository.count();
-        System.out.println("fetching repository " + stores);
+        Optional<StoreEntity> store = storeRepository.findById(storeEntity.getId());;
+//        System.out.println("fetching repository " + stores);
         try {
             storeRepository.save(storeEntity);
         }catch(Exception e){
@@ -29,17 +29,18 @@ public class RepositoryHandler {
         }
     }
 
-    public void updateStore(@Valid StoreEntity storeEntity){
+    public StoreEntity updateStore(@Valid StoreEntity storeEntity){
         Optional<StoreEntity> store = storeRepository.findById(storeEntity.getId());
         if(store.isEmpty()){
             System.out.println("Entity not found");
-            return;
+            return null;
         }
         try {
-            storeRepository.save(storeEntity);
+            return storeRepository.save(storeEntity);
         } catch(Exception e) {
             System.out.println(e.getCause());
         }
+        return null;
     }
 
     public void addUser(@Valid StoreEntity storeEntity, AddUserRequest request) {

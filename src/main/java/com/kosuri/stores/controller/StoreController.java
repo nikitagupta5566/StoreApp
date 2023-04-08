@@ -8,6 +8,8 @@ import com.kosuri.stores.model.response.UpdateStoreResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,9 +31,14 @@ public class StoreController {
 
     @PostMapping("/update")
     UpdateStoreResponse updateStore(@Valid @RequestBody UpdateStoreRequest request) {
-        UpdateStoreResponse updateStoreResponse = new UpdateStoreResponse(HttpStatus.OK);
+        String storeId = storeHandler.updateStore(request);
 
-        updateStoreResponse.setId(storeHandler.updateStore(request));
-        return updateStoreResponse;
+        if(storeId == null) {
+            return new UpdateStoreResponse(HttpStatus.INTERNAL_SERVER_ERROR);
+        } else {
+            UpdateStoreResponse updateStoreResponse = new UpdateStoreResponse(HttpStatus.OK);
+            updateStoreResponse.setId(storeId);
+            return updateStoreResponse;
+        }
     }
 }
