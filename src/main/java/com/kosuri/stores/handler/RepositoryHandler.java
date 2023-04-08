@@ -19,13 +19,17 @@ public class RepositoryHandler {
     @Autowired
     private StoreRepository storeRepository;
 
-    public void addStoreToRepository(@Valid StoreEntity storeEntity){
-        Optional<StoreEntity> store = storeRepository.findById(storeEntity.getId());;
-//        System.out.println("fetching repository " + stores);
-        try {
-            storeRepository.save(storeEntity);
-        }catch(Exception e){
-            System.out.println(e.getCause());
+    public StoreEntity addStoreToRepository(@Valid StoreEntity storeEntity){
+        Optional<StoreEntity> store = storeRepository.findById(storeEntity.getId());
+        if (store.isPresent()) {
+            return null;
+        } else {
+            try {
+                return storeRepository.save(storeEntity);
+            } catch(Exception e){
+                System.out.println(e.getCause());
+            }
+            return null;
         }
     }
 
@@ -45,7 +49,7 @@ public class RepositoryHandler {
 
     public void addUser(@Valid StoreEntity storeEntity, AddUserRequest request) {
         //TODO Update to query based on id
-        Optional<StoreEntity> store = storeRepository.findById("123");
+        Optional<StoreEntity> store = storeRepository.findById(request.getStoreId());
         store.get().setOwner(request.getName());
         store.get().setOwnerEmail(request.getEmail());
         store.get().setOwnerContact(request.getPhoneNumber());

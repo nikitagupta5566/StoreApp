@@ -14,9 +14,11 @@ public class StoreHandler {
     @Autowired
     private RepositoryHandler repositoryHandler;
     public String addStore(CreateStoreRequest createStoreRequest){
-        StoreEntity storeEntity = createStoreEntityFromRequest(createStoreRequest);
+        StoreEntity storeEntity = repositoryHandler.addStoreToRepository(createStoreEntityFromRequest(createStoreRequest));
 
-        repositoryHandler.addStoreToRepository(storeEntity);
+        if (storeEntity == null) {
+            return null;
+        }
 
         return storeEntity.getId();
     }
