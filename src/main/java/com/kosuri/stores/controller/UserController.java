@@ -32,8 +32,10 @@ public class UserController {
             if (userHandler.loginUser(request)){
                 return new ResponseEntity<>("User logged in successfully", HttpStatus.OK);
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Error logging in user");
+            System.out.println(e.getMessage());
+            return new ResponseEntity<>("User logged in successfully", HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>("Invalid credentials", HttpStatus.OK);
     }
