@@ -1,5 +1,6 @@
 package com.kosuri.stores.controller;
 
+import com.kosuri.stores.exception.APIException;
 import com.kosuri.stores.handler.StoreHandler;
 import com.kosuri.stores.model.request.CreateStoreRequest;
 import com.kosuri.stores.model.request.UpdateStoreRequest;
@@ -22,23 +23,38 @@ public class StoreController {
     private StoreHandler storeHandler;
 
     @PostMapping("/create")
-    CreateStoreResponse createStore(@Valid @RequestBody CreateStoreRequest request) {
-        CreateStoreResponse createStoreResponse = new CreateStoreResponse(HttpStatus.OK);
-
-        createStoreResponse.setId(storeHandler.addStore(request));
-        return createStoreResponse;
+    ResponseEntity<CreateStoreResponse> createStore(@Valid @RequestBody CreateStoreRequest request) {
+        CreateStoreResponse createStoreResponse = new CreateStoreResponse();
+        HttpStatus httpStatus;
+        try {
+            createStoreResponse.setId(storeHandler.addStore(request));
+            httpStatus = HttpStatus.OK;
+        } catch (APIException e) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+        } catch (Exception e) {
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            createStoreResponse.setResponseMessage(e.getMessage());
+        }
+        return ResponseEntity.status(httpStatus).body(createStoreResponse);
     }
 
     @PostMapping("/update")
-    UpdateStoreResponse updateStore(@Valid @RequestBody UpdateStoreRequest request) {
-        String storeId = storeHandler.updateStore(request);
+    ResponseEntity<UpdateStoreResponse> updateStore(@Valid @RequestBody UpdateStoreRequest request) {
+        HttpStatus httpStatus;
+        UpdateStoreResponse updateStoreResponse = new UpdateStoreResponse();
 
-        if(storeId == null) {
-            return new UpdateStoreResponse(HttpStatus.INTERNAL_SERVER_ERROR);
-        } else {
-            UpdateStoreResponse updateStoreResponse = new UpdateStoreResponse(HttpStatus.OK);
+        try {
+            String storeId = storeHandler.updateStore(request);
+            httpStatus = HttpStatus.OK;
             updateStoreResponse.setId(storeId);
-            return updateStoreResponse;
+        } catch (APIException e) {
+            httpStatus = HttpStatus.BAD_REQUEST;
+            updateStoreResponse.setResponseMessage(e.getMessage());
+        } catch (Exception e) {
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            updateStoreResponse.setResponseMessage(e.getMessage());
         }
+
+        return ResponseEntity.status(httpStatus).body(updateStoreResponse);
     }
 }

@@ -2,6 +2,7 @@ package com.kosuri.stores.handler;
 
 import com.kosuri.stores.dao.StoreEntity;
 import com.kosuri.stores.dao.StoreRepository;
+import com.kosuri.stores.exception.APIException;
 import com.kosuri.stores.model.Store;
 import com.kosuri.stores.model.request.AddUserRequest;
 import com.kosuri.stores.model.request.LoginUserRequest;
@@ -19,32 +20,24 @@ public class RepositoryHandler {
     @Autowired
     private StoreRepository storeRepository;
 
-    public StoreEntity addStoreToRepository(@Valid StoreEntity storeEntity){
+    public StoreEntity addStoreToRepository(@Valid StoreEntity storeEntity) throws Exception {
         Optional<StoreEntity> store = storeRepository.findById(storeEntity.getId());
         if (store.isPresent()) {
-            return null;
-        } else {
-            try {
-                return storeRepository.save(storeEntity);
-            } catch(Exception e){
-                System.out.println(e.getCause());
-            }
-            return null;
+            throw new APIException("Store with this id is already present");
         }
+        return storeRepository.save(storeEntity);
+
     }
 
-    public StoreEntity updateStore(@Valid StoreEntity storeEntity){
+    public StoreEntity updateStore(@Valid StoreEntity storeEntity) throws Exception {
         Optional<StoreEntity> store = storeRepository.findById(storeEntity.getId());
+
         if(store.isEmpty()){
             System.out.println("Entity not found");
-            return null;
+            throw new APIException("Store with this id not found!");
         }
-        try {
-            return storeRepository.save(storeEntity);
-        } catch(Exception e) {
-            System.out.println(e.getCause());
-        }
-        return null;
+
+        return storeRepository.save(storeEntity);
     }
 
     public void addUser(@Valid StoreEntity storeEntity, AddUserRequest request) {

@@ -13,22 +13,13 @@ import java.time.LocalDateTime;
 public class StoreHandler {
     @Autowired
     private RepositoryHandler repositoryHandler;
-    public String addStore(CreateStoreRequest createStoreRequest){
+    public String addStore(CreateStoreRequest createStoreRequest) throws Exception{
         StoreEntity storeEntity = repositoryHandler.addStoreToRepository(createStoreEntityFromRequest(createStoreRequest));
-
-        if (storeEntity == null) {
-            return null;
-        }
-
         return storeEntity.getId();
     }
 
-    public String updateStore(UpdateStoreRequest updateStoreRequest){
+    public String updateStore(UpdateStoreRequest updateStoreRequest) throws Exception {
         StoreEntity storeEntity = repositoryHandler.updateStore(updateStoreEntityFromRequest(updateStoreRequest));
-        if (storeEntity == null) {
-            return null;
-        }
-
         return storeEntity.getId();
     }
 
