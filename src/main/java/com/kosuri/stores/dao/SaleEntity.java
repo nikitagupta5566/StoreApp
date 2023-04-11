@@ -19,6 +19,7 @@ public class SaleEntity {
     @Column(name="Read_Doc_No",nullable = true, length = 45)
     private String readableDocNo;
     @Column(name = "Date")
+    @Temporal(TemporalType.DATE)
     private Date date;
     @Column(name = "Time")
     private String time;
