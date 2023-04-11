@@ -40,21 +40,19 @@ public class RepositoryHandler {
         return storeRepository.save(storeEntity);
     }
 
-    public void addUser(@Valid StoreEntity storeEntity, AddUserRequest request) {
+    public void addUser(@Valid StoreEntity storeEntity, AddUserRequest request) throws Exception {
         //TODO Update to query based on id
         Optional<StoreEntity> store = storeRepository.findById(request.getStoreId());
         store.get().setOwner(request.getName());
         store.get().setOwnerEmail(request.getEmail());
         store.get().setOwnerContact(request.getPhoneNumber());
-        try {
-            storeRepository.save(store.get());
-            storeRepository.save(storeEntity);
-        } catch(Exception e) {
-            System.out.println(e.getCause());
-        }
+
+        storeRepository.save(store.get());
+        storeRepository.save(storeEntity);
+
     }
 
-    public boolean validateuser(AddUserRequest request){
+    public boolean validateuser(AddUserRequest request) throws Exception{
         Optional<List<StoreEntity>> existingStores = storeRepository.findByOwnerEmailOrOwnerContact(request.getEmail(), request.getPhoneNumber());
         if(existingStores.isEmpty()){
             return true;
@@ -63,17 +61,17 @@ public class RepositoryHandler {
             //TODO Update to query based on id
             if (store.getName().contains("DUMMY")){
                 System.out.println("User already exists in system");
-                return false;
+                throw new APIException("User already exists in system");
             }
         }
 
         return true;
     }
 
-    public boolean loginUser(LoginUserRequest request) {
+    public boolean loginUser(LoginUserRequest request) throws Exception {
         Optional<List<StoreEntity>> existingStores = storeRepository.findByOwnerEmailOrOwnerContact(request.getEmail(), request.getPhoneNumber());
         if (existingStores.isEmpty()) {
-            return false;
+            throw new APIException("Invalid Credentials!");
         }
 
         for (StoreEntity store : existingStores.get()) {
@@ -84,6 +82,6 @@ public class RepositoryHandler {
             }
         }
 
-        return false;
+        throw new APIException("Invalid Credentials!");
     }
 }

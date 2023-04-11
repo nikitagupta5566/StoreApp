@@ -1,6 +1,7 @@
 package com.kosuri.stores.handler;
 
 import com.kosuri.stores.dao.StoreEntity;
+import com.kosuri.stores.exception.APIException;
 import com.kosuri.stores.model.request.AddUserRequest;
 import com.kosuri.stores.model.request.LoginUserRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class UserHandler {
     @Autowired
     private RepositoryHandler repositoryHandler;
 
-    public boolean addUser(AddUserRequest request){
+    public boolean addUser(AddUserRequest request) throws Exception {
         if(!repositoryHandler.validateuser(request)){
             return false;
         }
@@ -27,9 +28,9 @@ public class UserHandler {
         return true;
     }
 
-    public boolean loginUser(LoginUserRequest request) throws Exception{
-        if (request.getEmail() == null && request.getPhoneNumber() == null){
-            throw new Exception("email and phone number both can't be null");
+    public boolean loginUser(LoginUserRequest request) throws Exception {
+        if (request.getEmail() == null && request.getPhoneNumber() == null) {
+            throw new APIException("email and phone number both can't be null");
         }
 
         if(repositoryHandler.loginUser(request)){
