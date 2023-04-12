@@ -50,8 +50,18 @@ public class LoyaltyPointsHandler {
 
     public void redeemLoyaltyPointsForCustomer(RedeemLoyaltyPointsRequest request) throws Exception {
         CustomerLoyaltyEntity customerLoyaltyEntity = new CustomerLoyaltyEntity();
+
+        String name;
+        if (request.getFirstName() == null) {
+            name = request.getLastName();
+        } else if (request.getLastName() == null) {
+            name = request.getFirstName();
+        } else {
+            name = request.getFirstName() + " " + request.getLastName();
+        }
+
         customerLoyaltyEntity.setLoyaltyPoints(request.getLoyaltyPoints());
-        customerLoyaltyEntity.setCustomerName(request.getFirstName());
+        customerLoyaltyEntity.setCustomerName(name);
         customerLoyaltyEntity.setCustomerPhone(request.getCustomerPhone());
         customerLoyaltyEntity.setTotalSales(request.getTotalSales());
         customerLoyaltyEntity.setDiscountAmount(request.getDiscountAmount());
@@ -61,15 +71,25 @@ public class LoyaltyPointsHandler {
     }
 
     public CustomerLoyaltyResponse getDiscountForCustomer(CustomerLoyaltyRequest request) throws Exception {
-        Optional<CustomerLoyaltyEntity> customerLoyaltyEntityOptional = customerLoyaltyRepository.findByCustomerNameAndCustomerPhoneAndFirstByOrderByDiscountedDateDsc(request.getCustomerName(), request.getCustomerPhone());
+        String name;
+        if (request.getFirstName() == null) {
+            name = request.getLastName();
+        } else if (request.getLastName() == null) {
+            name = request.getFirstName();
+        } else {
+            name = request.getFirstName() + " " + request.getLastName();
+        }
+
+        Optional<CustomerLoyaltyEntity> customerLoyaltyEntityOptional = customerLoyaltyRepository.findByCustomerNameAndCustomerPhoneAndFirstByOrderByDiscountedDateDsc(name, request.getCustomerPhone());
         CustomerLoyaltyResponse response = new CustomerLoyaltyResponse();
-        response.setFirstName(request.getCustomerName());
+        response.setFirstName(request.getFirstName());
+        response.setLastName(request.getLastName());
         response.setPhoneNumber(request.getCustomerPhone());
 
         if (customerLoyaltyEntityOptional.isPresent()) {
             CustomerLoyaltyEntity customerLoyaltyEntity = customerLoyaltyEntityOptional.get();
             Date lastDiscountDate = customerLoyaltyEntity.getDiscountedDate();
-            Double totalSaleAfterDate = saleRepository.findTotalSalesForCustomerAfterDate(request.getCustomerName(), lastDiscountDate);
+            Double totalSaleAfterDate = saleRepository.findTotalSalesForCustomerAfterDate(name, lastDiscountDate);
 
             Optional<LoyaltyEntity> storeLoyaltyOptional = loyaltyRepository.findById(request.getStoreId());
             if (storeLoyaltyOptional.isEmpty()) {

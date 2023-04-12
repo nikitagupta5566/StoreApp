@@ -2,9 +2,18 @@ package com.kosuri.stores.model.request;
 
 public class CustomerLoyaltyRequest {
 
-    private String customerName;
+    private String firstName;
+    private String lastName;
     private String customerPhone;
     private String storeId;
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
     public String getStoreId() {
         return storeId;
@@ -14,12 +23,12 @@ public class CustomerLoyaltyRequest {
         this.storeId = storeId;
     }
 
-    public String getCustomerName() {
-        return customerName;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getCustomerPhone() {
