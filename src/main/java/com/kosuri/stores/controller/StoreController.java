@@ -31,6 +31,7 @@ public class StoreController {
             httpStatus = HttpStatus.OK;
         } catch (APIException e) {
             httpStatus = HttpStatus.BAD_REQUEST;
+            createStoreResponse.setResponseMessage(e.getMessage());
         } catch (Exception e) {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
             createStoreResponse.setResponseMessage(e.getMessage());
