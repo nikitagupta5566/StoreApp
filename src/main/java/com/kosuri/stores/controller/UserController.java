@@ -54,7 +54,6 @@ public class UserController {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
             body = e.getMessage();
         }
-        
         return new ResponseEntity<>(body, httpStatus);
     }
 }
