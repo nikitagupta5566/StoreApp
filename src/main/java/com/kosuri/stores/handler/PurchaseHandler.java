@@ -86,15 +86,10 @@ public class PurchaseHandler {
             purchaseArrayList.add(tempPurchase);
         }
 
-        try {
-            purchaseRepository.saveAll(purchaseArrayList);
+        purchaseRepository.saveAll(purchaseArrayList);
 
-            for(PurchaseEntity purchaseEntity: purchaseArrayList) {
-                updateStock(purchaseEntity);
-            }
-
-        } catch (Exception e) {
-            System.out.println(e.getCause());
+        for(PurchaseEntity purchaseEntity: purchaseArrayList) {
+            updateStock(purchaseEntity);
         }
     }
 

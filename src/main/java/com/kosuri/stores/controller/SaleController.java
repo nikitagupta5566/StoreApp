@@ -2,14 +2,16 @@ package com.kosuri.stores.controller;
 
 import com.kosuri.stores.handler.RepositoryHandler;
 import com.kosuri.stores.handler.SaleHandler;
+import com.kosuri.stores.model.response.GenericResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 
@@ -21,8 +23,20 @@ public class SaleController {
     @Autowired
     private SaleHandler saleHandler;
     @PostMapping("/import")
-    public void mapReapExcelDatatoDB(@RequestParam("file") MultipartFile reapExcelDataFile,
-                                     @RequestParam("store_id") String storeId) throws Exception {
-        saleHandler.createSaleEntityFromRequest(reapExcelDataFile, storeId);
+    public ResponseEntity<GenericResponse> mapReapExcelDatatoDB(@RequestParam("file") MultipartFile reapExcelDataFile,
+                                                                @RequestParam("store_id") String storeId) {
+        GenericResponse response = new GenericResponse();
+        try {
+            saleHandler.createSaleEntityFromRequest(reapExcelDataFile, storeId);
+            response.setResponseMessage("Successfully uploaded the file!");
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        } catch (IOException e) {
+            response.setResponseMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        } catch (Exception e) {
+            response.setResponseMessage(e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
     }
+
 }

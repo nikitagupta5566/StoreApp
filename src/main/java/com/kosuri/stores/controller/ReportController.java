@@ -18,7 +18,7 @@ public class ReportController {
     @Autowired
     private ReportHandler reportHandler;
     @PostMapping("/generate/purchase")
-    public GeneratePurchaseReportResponse generatePurchaseReport(@Valid @RequestBody GeneratePurchaseReportRequest request) throws Exception {
+    public GeneratePurchaseReportResponse generatePurchaseReport(@Valid @RequestBody GeneratePurchaseReportRequest request) throws Exception{
         return reportHandler.generatePurchaseReport(request);
     }
 

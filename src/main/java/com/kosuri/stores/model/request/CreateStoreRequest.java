@@ -12,7 +12,8 @@ public class CreateStoreRequest extends RequestEntity<CreateStoreRequest> {
     }
 
     @NotNull
-    private String typee;
+    private String storeType;
+    @NotNull
     private String id;
     @NotNull
     private String name;
@@ -33,12 +34,23 @@ public class CreateStoreRequest extends RequestEntity<CreateStoreRequest> {
     @NotNull
     private String ownerEmail;
 
-    public String getTypee() {
-        return typee;
+    @NotNull
+    private String location;
+
+    public String getLocation() {
+        return location;
     }
 
-    public void setTypee(String typee) {
-        this.typee = typee;
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getStoreType() {
+        return storeType;
+    }
+
+    public void setStoreType(String storeType) {
+        this.storeType = storeType;
     }
 
     public String getId() {

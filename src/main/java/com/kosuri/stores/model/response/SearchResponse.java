@@ -4,7 +4,7 @@ import com.kosuri.stores.model.search.SearchResult;
 
 import java.util.List;
 
-public class SearchResponse {
+public class SearchResponse extends GenericResponse {
     private List<SearchResult> searchResultList;
 
     public List<SearchResult> getSearchResultList() {
