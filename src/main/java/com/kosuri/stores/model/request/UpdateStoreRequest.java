@@ -4,14 +4,20 @@ import jakarta.validation.constraints.NotNull;
 
 public class UpdateStoreRequest {
     @NotNull
-    private String type;
-    private int id;
+    private String storeType;
+    private String id;
     @NotNull
     private String name;
     @NotNull
     private String pincode;
+
+    @NotNull
+    private String status;
     @NotNull
     private String district;
+
+    @NotNull
+    private String location;
     private String town;
     @NotNull
     private String state;
@@ -25,19 +31,19 @@ public class UpdateStoreRequest {
     @NotNull
     private String ownerEmail;
 
-    public String getType() {
-        return type;
+    public String getStoreType() {
+        return storeType;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setStoreType(String storeType) {
+        this.storeType = storeType;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -119,5 +125,21 @@ public class UpdateStoreRequest {
 
     public void setOwnerEmail(String ownerEmail) {
         this.ownerEmail = ownerEmail;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

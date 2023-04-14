@@ -1,11 +1,20 @@
 package com.kosuri.stores.model.request;
 
 import jakarta.validation.constraints.NotNull;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.RequestEntity;
 
-public class CreateStoreRequest {
+import java.net.URI;
+
+public class CreateStoreRequest extends RequestEntity<CreateStoreRequest> {
+    public CreateStoreRequest(HttpMethod method, URI url) {
+        super(method, url);
+    }
+
     @NotNull
-    private String type;
-    private int id;
+    private String storeType;
+    @NotNull
+    private String id;
     @NotNull
     private String name;
     @NotNull
@@ -25,19 +34,30 @@ public class CreateStoreRequest {
     @NotNull
     private String ownerEmail;
 
-    public String getType() {
-        return type;
+    @NotNull
+    private String location;
+
+    public String getLocation() {
+        return location;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
-    public int getId() {
+    public String getStoreType() {
+        return storeType;
+    }
+
+    public void setStoreType(String storeType) {
+        this.storeType = storeType;
+    }
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

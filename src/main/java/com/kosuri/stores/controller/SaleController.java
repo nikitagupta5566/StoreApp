@@ -1,35 +1,33 @@
 package com.kosuri.stores.controller;
 
-import com.kosuri.stores.handler.PurchaseHandler;
 import com.kosuri.stores.handler.RepositoryHandler;
+import com.kosuri.stores.handler.SaleHandler;
 import com.kosuri.stores.model.response.GenericResponse;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import java.io.IOException;
+
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
-@RequestMapping("/purchase")
-public class PurchaseController {
+@RequestMapping("/sale")
+public class SaleController {
     @Autowired
     private RepositoryHandler repositoryHandler;
     @Autowired
-    private PurchaseHandler purchaseHandler;
+    private SaleHandler saleHandler;
     @PostMapping("/import")
     public ResponseEntity<GenericResponse> mapReapExcelDatatoDB(@RequestParam("file") MultipartFile reapExcelDataFile,
-                                                               @RequestParam("store_id") String storeId) {
+                                                                @RequestParam("store_id") String storeId) {
         GenericResponse response = new GenericResponse();
         try {
-            purchaseHandler.createPurchaseEntityFromRequest(reapExcelDataFile, storeId);
+            saleHandler.createSaleEntityFromRequest(reapExcelDataFile, storeId);
             response.setResponseMessage("Successfully uploaded the file!");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (IOException e) {
@@ -39,8 +37,6 @@ public class PurchaseController {
             response.setResponseMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
-
     }
-
 
 }

@@ -1,31 +1,30 @@
 package com.kosuri.stores.dao;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
+import jakarta.persistence.*;
+
+import java.util.Date;
 
 @Entity
 @Table(name = "pharma_purchase_detail")
-public class PurchaseEntity{
-    @Id
-    @Column(name="Doc_Number")
-    private long doc_Number;
+public class PurchaseEntity {
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    private Integer id;
+
+    @Column(name="Doc_Number")
+    private String doc_Number;
 
     @Column(name="Ref_Doc_Number",nullable = true, length = 45)
     private String readableDocNo;
     @Column(name = "Date")
-    private String date;
-
+    private Date date;
 
     @Column(name="Bill_No",nullable = true, length = 45)
     private String billNo;
 
-
     @Column(name="Bill_Date",nullable = true, length = 45)
-    private String billDt;
+    private Date billDt;
     @Column(name="Item_Code",nullable = true, length = 45)
     private String itemCode;
     @Column(name="Item_Name",nullable = true, length = 45)
@@ -33,7 +32,7 @@ public class PurchaseEntity{
     @Column(name="Batch_Number",nullable = true, length = 45)
     private String batchNo;
     @Column(name="Expiry_Date",nullable = true, length = 45)
-    private String expiryDate;
+    private Date expiryDate;
     @Column(name="Cat_Code",nullable = true, length = 45)
     private String catCode;
 
@@ -55,51 +54,51 @@ public class PurchaseEntity{
     @Column(name="DC_Srno",nullable = true, length = 45)
     private String dcSrno;
     @Column(name="Qty_Box",nullable = true, length = 45)
-    private String qty;
+    private Integer qty;
     @Column(name="Pack_Qty",nullable = true, length = 45)
-    private String packQty;
+    private Double packQty;
     @Column(name="Loose_Qty",nullable = true, length = 45)
-    private String looseQty;
+    private Double looseQty;
     @Column(name="Sch_Pack_Qty",nullable = true, length = 45)
-    private String schPackQty;
+    private Double schPackQty;
     @Column(name="Sch_Loose_Qty",nullable = true, length = 45)
-    private String schLooseQty;
+    private Double schLooseQty;
     @Column(name="Sch_Disc",nullable = true, length = 45)
-    private String schDisc;
-    @Column(name="Sch_Rate",nullable = true, length = 45)
-     private String SaleRate;
+    private Double schDisc;
+    @Column(name="Sal_Rate",nullable = true, length = 45)
+     private Double SaleRate;
     @Column(name="Pur_Rate",nullable = true, length = 45)
-    private String purRate;
+    private Double purRate;
     @Column(name="Mrp",nullable = true, length = 45)
-    private String mRP;
+    private Double mRP;
     @Column(name="Purchase_Value",nullable = true, length = 45)
-    private String purValue;
+    private Double purValue;
     @Column(name="Disc_Per",nullable = true, length = 45)
-    private String discPer;
+    private Double discPer;
     @Column(name="Margin",nullable = true, length = 45)
-    private String margin;
+    private Double margin;
     @Column(name="Supp_Code",nullable = true, length = 45)
     private String suppCode;
     @Column(name="Supp_Name",nullable = true, length = 45)
     private String suppName;
     @Column(name="Disc",nullable = true, length = 45)
-    private String discValue;
+    private Double discValue;
     @Column(name="Taxable_Amt",nullable = true, length = 45)
-    private String taxableAmt;
+    private Double taxableAmt;
     @Column(name="Gst_Code",nullable = true, length = 45)
     private String gstCode;
     @Column(name="Cgst",nullable = true, length = 45)
-    private String cGSTPer;
+    private Integer cGSTPer;
     @Column(name="Sgst",nullable = true, length = 45)
-    private String sGSTPer;
+    private Integer sGSTPer;
     @Column(name="Cgst_Amt",nullable = true, length = 45)
-    private String cGSTAmt;
+    private Double cGSTAmt;
     @Column(name="Sgst_Amt",nullable = true, length = 45)
-    private String sGSTAmt;
+    private Double sGSTAmt;
     @Column(name="Igst",nullable = true, length = 45)
-    private String iGSTPer;
+    private Integer iGSTPer;
     @Column(name="Total",nullable = true, length = 45)
-    private String total;
+    private Double total;
     @Column(name="Post",nullable = true, length = 45)
     private String post;
     @Column(name="Item_Category",nullable = true, length = 45)
@@ -107,11 +106,12 @@ public class PurchaseEntity{
 
 
     @Column(name="Cess_Per",nullable = true, length = 45)
-    private String cessPer;
+    private Integer cessPer;
     @Column(name="Cess_Amt",nullable = true, length = 45)
-    private String cessAmt;
+    private Double cessAmt;
     @Column(name="Store_ID")
     private String storeId;
+
 
     public String getItemCat() {
         return itemCat;
@@ -121,11 +121,11 @@ public class PurchaseEntity{
     public void setItemCat(String itemCat) {
         this.itemCat = itemCat;
     }
-    public void setSaleRate(String saleRate) {
+    public void setSaleRate(Double saleRate) {
         this.SaleRate = saleRate;
     }
 
-    public String getSaleRate(String saleRate) {
+    public Double getSaleRate(String saleRate) {
         return this.SaleRate;
     }
 
@@ -134,12 +134,12 @@ public class PurchaseEntity{
         this.itemCat = itemCat;
     }
 
-    public long getDoc_Number() {
+    public String getDoc_Number() {
         return doc_Number;
     }
 
 
-    public void setDoc_Number(long doc_Number) {
+    public void setDoc_Number(String doc_Number) {
         this.doc_Number = doc_Number;
     }
 
@@ -154,12 +154,12 @@ public class PurchaseEntity{
     }
 
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -174,12 +174,12 @@ public class PurchaseEntity{
     }
 
 
-    public String getBillDt() {
+    public Date getBillDt() {
         return billDt;
     }
 
 
-    public void setBillDt(String billDt) {
+    public void setBillDt(Date billDt) {
         this.billDt = billDt;
     }
 
@@ -214,12 +214,12 @@ public class PurchaseEntity{
     }
 
 
-    public String getExpiryDate() {
+    public Date getExpiryDate() {
         return expiryDate;
     }
 
 
-    public void setExpiryDate(String expiryDate) {
+    public void setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
     }
 
@@ -234,22 +234,22 @@ public class PurchaseEntity{
     }
 
 
-    public String getCessPer() {
+    public Integer getCessPer() {
         return cessPer;
     }
 
 
-    public void setCessPer(String cessPer) {
+    public void setCessPer(Integer cessPer) {
         this.cessPer = cessPer;
     }
 
 
-    public String getCessAmt() {
+    public Double getCessAmt() {
         return cessAmt;
     }
 
 
-    public void setCessAmt(String cessAmt) {
+    public void setCessAmt(Double cessAmt) {
         this.cessAmt = cessAmt;
     }
 
@@ -333,112 +333,112 @@ public class PurchaseEntity{
     }
 
 
-    public String getQty() {
+    public Integer getQty() {
         return qty;
     }
 
 
-    public void setQty(String qty) {
+    public void setQty(Integer qty) {
         this.qty = qty;
     }
 
 
-    public String getPackQty() {
+    public Double getPackQty() {
         return packQty;
     }
 
 
-    public void setPackQty(String packQty) {
+    public void setPackQty(Double packQty) {
         this.packQty = packQty;
     }
 
 
-    public String getLooseQty() {
+    public Double getLooseQty() {
         return looseQty;
     }
 
 
-    public void setLooseQty(String looseQty) {
+    public void setLooseQty(Double looseQty) {
         this.looseQty = looseQty;
     }
 
 
-    public String getSchPackQty() {
+    public Double getSchPackQty() {
         return schPackQty;
     }
 
 
-    public void setSchPackQty(String schPackQty) {
+    public void setSchPackQty(Double schPackQty) {
         this.schPackQty = schPackQty;
     }
 
 
-    public String getSchLooseQty() {
+    public Double getSchLooseQty() {
         return schLooseQty;
     }
 
 
-    public void setSchLooseQty(String schLooseQty) {
+    public void setSchLooseQty(Double schLooseQty) {
         this.schLooseQty = schLooseQty;
     }
 
 
-    public String getSchDisc() {
+    public Double getSchDisc() {
         return schDisc;
     }
 
 
-    public void setSchDisc(String schDisc) {
+    public void setSchDisc(Double schDisc) {
         this.schDisc = schDisc;
     }
 
 
-    public String getPurRate() {
+    public Double getPurRate() {
         return purRate;
     }
 
 
-    public void setPurRate(String purRate) {
+    public void setPurRate(Double purRate) {
         this.purRate = purRate;
     }
 
 
-    public String getmRP() {
+    public Double getmRP() {
         return mRP;
     }
 
 
-    public void setmRP(String mRP) {
+    public void setmRP(Double mRP) {
         this.mRP = mRP;
     }
 
 
-    public String getPurValue() {
+    public Double getPurValue() {
         return purValue;
     }
 
 
-    public void setPurValue(String purValue) {
+    public void setPurValue(Double purValue) {
         this.purValue = purValue;
     }
 
 
-    public String getDiscPer() {
+    public Double getDiscPer() {
         return discPer;
     }
 
 
-    public void setDiscPer(String discPer) {
+    public void setDiscPer(Double discPer) {
         this.discPer = discPer;
     }
 
 
-    public String getMargin() {
+    public Double getMargin() {
         return margin;
     }
 
 
-    public void setMargin(String margin) {
+    public void setMargin(Double margin) {
         this.margin = margin;
     }
 
@@ -461,22 +461,22 @@ public class PurchaseEntity{
         this.suppName = suppName;
     }
 
-    public String getDiscValue() {
+    public Double getDiscValue() {
         return discValue;
     }
 
 
-    public void setDiscValue(String discValue) {
+    public void setDiscValue(Double discValue) {
         this.discValue = discValue;
     }
 
 
-    public String getTaxableAmt() {
+    public Double getTaxableAmt() {
         return taxableAmt;
     }
 
 
-    public void setTaxableAmt(String taxableAmt) {
+    public void setTaxableAmt(Double taxableAmt) {
         this.taxableAmt = taxableAmt;
     }
 
@@ -491,54 +491,54 @@ public class PurchaseEntity{
     }
 
 
-    public String getcGSTPer() {
+    public Integer getcGSTPer() {
         return cGSTPer;
     }
 
 
-    public void setcGSTPer(String cGSTPer) {
+    public void setcGSTPer(Integer cGSTPer) {
         this.cGSTPer = cGSTPer;
     }
 
 
-    public String getsGSTPer() {
+    public Integer getsGSTPer() {
         return sGSTPer;
     }
 
 
-    public void setsGSTPer(String sGSTPer) {
+    public void setsGSTPer(Integer sGSTPer) {
         this.sGSTPer = sGSTPer;
     }
 
-    public String getcGSTAmt() {
+    public Double getcGSTAmt() {
         return cGSTAmt;
     }
 
-    public void setcGSTAmt(String cGSTAmt) {
+    public void setcGSTAmt(Double cGSTAmt) {
         this.cGSTAmt = cGSTAmt;
     }
 
-    public String getsGSTAmt() {
+    public Double getsGSTAmt() {
         return sGSTAmt;
     }
 
-    public void setsGSTAmt(String sGSTAmt) {
+    public void setsGSTAmt(Double sGSTAmt) {
         this.sGSTAmt = sGSTAmt;
     }
 
-    public String getiGSTPer() {
+    public Integer getiGSTPer() {
         return iGSTPer;
     }
 
-    public void setiGSTPer(String iGSTPer) {
+    public void setiGSTPer(Integer iGSTPer) {
         this.iGSTPer = iGSTPer;
     }
 
-    public String getTotal() {
+    public Double getTotal() {
         return total;
     }
 
-    public void setTotal(String total) {
+    public void setTotal(Double total) {
         this.total = total;
     }
 
@@ -550,7 +550,7 @@ public class PurchaseEntity{
         this.post = post;
     }
 
-    public String getSaleRate() {
+    public Double getSaleRate() {
         return SaleRate;
     }
 

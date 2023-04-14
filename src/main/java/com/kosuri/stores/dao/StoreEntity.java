@@ -11,8 +11,9 @@ import jakarta.validation.constraints.NotNull;
 public class StoreEntity {
     @NotNull
     private @Column(name = "Store_Category") String type;
-    @Id @NotNull
-    private @Column(name = "Store_ID") Integer id;
+    @Id
+    @NotNull
+    private @Column(name = "Store_ID") String id;
     @NotNull
     private @Column(name = "Store_Name") String name;
     @NotNull
@@ -58,11 +59,11 @@ public class StoreEntity {
         this.type = type;
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
