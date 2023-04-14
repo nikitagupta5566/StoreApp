@@ -8,6 +8,7 @@ import com.kosuri.stores.exception.APIException;
 import com.kosuri.stores.model.Store;
 import com.kosuri.stores.model.request.AddUserRequest;
 import com.kosuri.stores.model.request.LoginUserRequest;
+import com.kosuri.stores.model.request.AddUserRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

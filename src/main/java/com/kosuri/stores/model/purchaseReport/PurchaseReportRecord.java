@@ -8,13 +8,13 @@ public class PurchaseReportRecord {
     private String productType;
     private String storeId;
     private String batchNo;
-    private String expiryDate;
+    private Date expiryDate;
     private String mfgDate;
-    private String mrp;
-    private String discount;
-    private String gst;
-    private String purchasePrice;
-    private String purchaseAmount;
+    private Double mrp;
+    private Double discount;
+    private Double gst;
+    private Double purchasePrice;
+    private Double purchaseAmount;
 
     public String getVendorName() {
         return vendorName;
@@ -56,11 +56,11 @@ public class PurchaseReportRecord {
         this.batchNo = batchNo;
     }
 
-    public String getExpiryDate() {
+    public Date getExpiryDate() {
         return expiryDate;
     }
 
-    public void setExpiryDate(String expiryDate) {
+    public void setExpiryDate(Date expiryDate) {
         this.expiryDate = expiryDate;
     }
 
@@ -72,43 +72,43 @@ public class PurchaseReportRecord {
         this.mfgDate = mfgDate;
     }
 
-    public String getMrp() {
+    public Double getMrp() {
         return mrp;
     }
 
-    public void setMrp(String mrp) {
+    public void setMrp(Double mrp) {
         this.mrp = mrp;
     }
 
-    public String getDiscount() {
+    public Double getDiscount() {
         return discount;
     }
 
-    public void setDiscount(String discount) {
+    public void setDiscount(Double discount) {
         this.discount = discount;
     }
 
-    public String getGst() {
+    public Double getGst() {
         return gst;
     }
 
-    public void setGst(String gst) {
+    public void setGst(Double gst) {
         this.gst = gst;
     }
 
-    public String getPurchasePrice() {
+    public Double getPurchasePrice() {
         return purchasePrice;
     }
 
-    public void setPurchasePrice(String purchasePrice) {
+    public void setPurchasePrice(Double purchasePrice) {
         this.purchasePrice = purchasePrice;
     }
 
-    public String getPurchaseAmount() {
+    public Double getPurchaseAmount() {
         return purchaseAmount;
     }
 
-    public void setPurchaseAmount(String purchaseAmount) {
+    public void setPurchaseAmount(Double purchaseAmount) {
         this.purchaseAmount = purchaseAmount;
     }
 }

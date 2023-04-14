@@ -32,7 +32,7 @@ public class ReportHandler {
             if (validatePurchaseRecord(request, purchaseEntity)) {
                 PurchaseReportRecord record = new PurchaseReportRecord();
                 record.setStoreId(purchaseEntity.getStoreId());
-                record.setDate(formatter.parse(purchaseEntity.getDate()));
+                record.setDate(purchaseEntity.getDate());
                 record.setVendorName(purchaseEntity.getSuppName());
                 record.setProductType("TEST");
                 record.setBatchNo(purchaseEntity.getBatchNo());
@@ -55,8 +55,8 @@ public class ReportHandler {
 
     private boolean validatePurchaseRecord(GeneratePurchaseReportRequest request, PurchaseEntity purchaseEntity) throws Exception{
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
-        if (!formatter.parse(purchaseEntity.getDate()).before(request.getDateFrom()) &&
-                !formatter.parse(purchaseEntity.getDate()).after(request.getDateTo())){
+        if (!purchaseEntity.getDate().before(request.getDateFrom()) &&
+                !purchaseEntity.getDate().after(request.getDateTo())) {
             return true;
         }
         return false;
