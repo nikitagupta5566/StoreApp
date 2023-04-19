@@ -60,6 +60,11 @@ public class RepositoryHandler {
 
     }
 
+    public List<StoreEntity> getAllStores() throws Exception {
+        List<StoreEntity> storeEntities = storeRepository.findAll();
+        return storeEntities;
+    }
+
 
     public Optional<List<PurchaseEntity>> getPurchaseRecordsByStore(String storeId){
         return purchaseRepository.findByStoreId(storeId);

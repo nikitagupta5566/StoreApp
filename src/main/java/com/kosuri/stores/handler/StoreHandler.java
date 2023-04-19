@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class StoreHandler {
@@ -21,6 +23,18 @@ public class StoreHandler {
     public String updateStore(UpdateStoreRequest updateStoreRequest) throws Exception {
         StoreEntity storeEntity = repositoryHandler.updateStore(updateStoreEntityFromRequest(updateStoreRequest));
         return storeEntity.getId();
+    }
+
+    public List<StoreEntity> getAllStores() throws Exception{
+        List<StoreEntity> storeEntities = repositoryHandler.getAllStores();
+
+        List<StoreEntity> stores = new ArrayList<>();
+        for(StoreEntity store: storeEntities){
+            if(store.getId() != "DUMMY"){
+                stores.add(store);
+            }
+        }
+        return stores;
     }
 
     private StoreEntity createStoreEntityFromRequest(CreateStoreRequest createStoreRequest){
