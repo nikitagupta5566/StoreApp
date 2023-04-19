@@ -48,7 +48,7 @@ public class UserHandler {
         storeEntity.setRole(request.getRole().toString());
         storeEntity.setPassword(request.getPassword());
 
-        //setting dummy parameter.
+        //setting dummy parameters.
         storeEntity.setId("DUMMY" + request.getPhoneNumber());
 //        storeEntity.setId(((int) Math.random()));
         storeEntity.setType("DUMMY");

@@ -2,6 +2,7 @@ package com.kosuri.stores.handler;
 
 import com.kosuri.stores.dao.*;
 import com.kosuri.stores.exception.APIException;
+import com.kosuri.stores.model.enums.Role;
 import com.kosuri.stores.model.request.AddUserRequest;
 import com.kosuri.stores.model.request.LoginUserRequest;
 import jakarta.validation.Valid;
@@ -44,11 +45,17 @@ public class RepositoryHandler {
     public void addUser(@Valid StoreEntity storeEntity, AddUserRequest request) throws Exception {
         //TODO Update to query based on id
         Optional<StoreEntity> store = storeRepository.findById(request.getStoreId());
-        store.get().setOwner(request.getName());
-        store.get().setOwnerEmail(request.getEmail());
-        store.get().setOwnerContact(request.getPhoneNumber());
+        if(request.getRole().equals(Role.STORE_MANAGER) && store.isEmpty()){
+            System.out.println("No store found for user");
+            throw new APIException("Store with this id not found for user!");
+        }
+        if(!store.isEmpty()) {
+            store.get().setOwner(request.getName());
+            store.get().setOwnerEmail(request.getEmail());
+            store.get().setOwnerContact(request.getPhoneNumber());
 
-        storeRepository.save(store.get());
+            storeRepository.save(store.get());
+        }
         storeRepository.save(storeEntity);
 
     }
