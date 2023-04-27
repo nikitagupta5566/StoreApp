@@ -1,6 +1,5 @@
 package com.kosuri.stores.controller;
 
-import com.kosuri.stores.dao.RoleEntity;
 import com.kosuri.stores.handler.RepositoryHandler;
 import com.kosuri.stores.handler.RoleHandler;
 import com.kosuri.stores.handler.TaskHandler;
@@ -10,10 +9,6 @@ import com.kosuri.stores.model.response.GetAllRolesResponse;
 import com.kosuri.stores.model.response.GetTasksForRoleResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Objects;
 
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -55,7 +50,7 @@ public class RoleController {
 
     }
 
-    @GetMapping("/getTasks")
+    @PostMapping("/getTasks")
     public ResponseEntity<GetTasksForRoleResponse> fetchAllTaskOfRole(@RequestBody @Valid GetTasksForRoleRequest request) {
         try {
             GetTasksForRoleResponse response = taskHandler.fetchAllTaskOfRole(request);

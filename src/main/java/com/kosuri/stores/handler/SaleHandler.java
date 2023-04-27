@@ -1,7 +1,6 @@
 package com.kosuri.stores.handler;
-import com.kosuri.stores.dao.PurchaseEntity;
-import com.kosuri.stores.dao.SaleRepository;
-import com.kosuri.stores.dao.SaleEntity;
+import com.kosuri.stores.dao.*;
+import com.kosuri.stores.exception.APIException;
 import com.kosuri.stores.model.enums.StockUpdateRequestType;
 import com.kosuri.stores.model.request.StockUpdateRequest;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -15,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -23,8 +23,20 @@ public class SaleHandler {
     private SaleRepository saleRepository;
     @Autowired
     private StockHandler stockHandler;
+
+    @Autowired
+    private StoreRepository storeRepository;
+
     @Transactional
-    public void createSaleEntityFromRequest(MultipartFile reapExcelDataFile, String storeId) throws Exception{
+    public void createSaleEntityFromRequest(MultipartFile reapExcelDataFile, String storeId, String emailId) throws Exception{
+
+        Optional<StoreEntity> store = storeRepository.findById(storeId);
+        if (store.isPresent()) {
+            String ownerEmail = store.get().getOwnerEmail();
+            if (!ownerEmail.equals(emailId)) {
+                throw new APIException("User does not has access to upload file");
+            }
+        }
 
         List<SaleEntity> saleArrayList = new ArrayList<SaleEntity>();
         XSSFWorkbook workbook = new XSSFWorkbook(reapExcelDataFile.getInputStream());

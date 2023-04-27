@@ -24,10 +24,10 @@ public class SaleController {
     private SaleHandler saleHandler;
     @PostMapping("/import")
     public ResponseEntity<GenericResponse> mapReapExcelDatatoDB(@RequestParam("file") MultipartFile reapExcelDataFile,
-                                                                @RequestParam("store_id") String storeId) {
+                                                                @RequestParam("store_id") String storeId,  @RequestParam("email_id") String emailId) {
         GenericResponse response = new GenericResponse();
         try {
-            saleHandler.createSaleEntityFromRequest(reapExcelDataFile, storeId);
+            saleHandler.createSaleEntityFromRequest(reapExcelDataFile, storeId, emailId);
             response.setResponseMessage("Successfully uploaded the file!");
             return ResponseEntity.status(HttpStatus.OK).body(response);
         } catch (IOException e) {

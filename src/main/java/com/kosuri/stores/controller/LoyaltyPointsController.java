@@ -45,7 +45,7 @@ public class LoyaltyPointsController {
         return null;
     }
 
-    @GetMapping("/checkDiscount")
+    @PostMapping("/checkDiscount")
     public ResponseEntity<CustomerLoyaltyResponse> checkDiscount(@Valid @RequestBody CustomerLoyaltyRequest request) {
         CustomerLoyaltyResponse response = new CustomerLoyaltyResponse();
         try {

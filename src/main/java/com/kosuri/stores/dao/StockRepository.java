@@ -8,6 +8,6 @@ public interface StockRepository extends JpaRepository<StockEntity, StockId> {
 
     public StockEntity findByMfNameAndItemNameAndBatchAndStoreId(String mFName, String itemName, String batch, String storeId);
 
-    public List<StockEntity> findByItemNameContainingAndStoreIdAndBalQuantityGreaterThan(String itemName, String storeId, Double balQuantity);
+    public List<StockEntity> findByItemNameContainingAndStoreIdAndItemCategoryAndBalQuantityGreaterThan(String itemName, String storeId, String category, Double balQuantity);
 }
 

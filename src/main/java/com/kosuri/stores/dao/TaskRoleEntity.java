@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "taks_role_mapping")
+@IdClass(TaskRoleId.class)
 public class TaskRoleEntity {
 
     @Id
@@ -15,6 +16,7 @@ public class TaskRoleEntity {
 
 
     @Column(name="RoleId",nullable = true, length = 45)
+    @Id
     private Integer roleId;
 
 

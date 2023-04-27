@@ -4,10 +4,9 @@ import com.kosuri.stores.dao.StoreEntity;
 import com.kosuri.stores.exception.APIException;
 import com.kosuri.stores.model.request.AddUserRequest;
 import com.kosuri.stores.model.request.LoginUserRequest;
+import com.kosuri.stores.model.response.LoginUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -16,6 +15,9 @@ import java.time.LocalDateTime;
 public class UserHandler {
     @Autowired
     private RepositoryHandler repositoryHandler;
+
+    @Autowired
+    private RoleHandler roleHandler;
 
     public boolean addUser(AddUserRequest request) throws Exception {
         if(!repositoryHandler.validateuser(request)){
@@ -28,15 +30,18 @@ public class UserHandler {
         return true;
     }
 
-    public boolean loginUser(LoginUserRequest request) throws Exception {
+    public LoginUserResponse loginUser(LoginUserRequest request) throws Exception {
+        LoginUserResponse response = new LoginUserResponse();
+
         if (request.getEmail() == null && request.getPhoneNumber() == null) {
             throw new APIException("email and phone number both can't be null");
         }
 
-        if(repositoryHandler.loginUser(request)){
-            return true;
-        }
-        return false;
+        StoreEntity storeEntity = repositoryHandler.loginUser(request);
+        Integer roleId = roleHandler.getRoleIdFromRoleName(storeEntity.getRole());
+        response.setRoleName(storeEntity.getRole());
+        response.setRoleId(roleId);
+        return response;
     }
 
     private StoreEntity getEntityFromUserRequest(AddUserRequest request){
@@ -45,7 +50,7 @@ public class UserHandler {
         storeEntity.setOwnerContact(request.getPhoneNumber());
         storeEntity.setOwnerEmail(request.getEmail());
         storeEntity.setLocation(request.getAddress());
-        storeEntity.setRole(request.getRole().toString());
+        storeEntity.setRole(request.getRole());
         storeEntity.setPassword(request.getPassword());
 
         //setting dummy parameters.

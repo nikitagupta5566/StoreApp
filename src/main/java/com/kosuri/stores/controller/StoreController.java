@@ -29,6 +29,7 @@ public class StoreController {
         HttpStatus httpStatus;
         try {
             createStoreResponse.setId(storeHandler.addStore(request));
+            createStoreResponse.setResponseMessage("Store Added successfully!");
             httpStatus = HttpStatus.OK;
         } catch (APIException e) {
             httpStatus = HttpStatus.BAD_REQUEST;

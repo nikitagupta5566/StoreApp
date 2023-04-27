@@ -44,7 +44,7 @@ public class TaskHandler {
             Optional<TaskEntity> taskEntityOptional = taskRepository.findById(taskId);
 
             if (taskEntityOptional.isEmpty()) {
-                throw new APIException(String.format("Task with id {} not found", taskId));
+                throw new APIException(String.format("Task with id %s not found", taskId));
             }
 
             tempTaskRole.setTaskName(taskEntityOptional.get().getTaskName());

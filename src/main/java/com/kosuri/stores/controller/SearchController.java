@@ -18,8 +18,9 @@ public class SearchController {
 
     @RequestMapping(value = "/search", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<SearchResponse> search(@RequestParam("medicine") String medicine, @RequestParam("location") String location) {
-        List<SearchResult> searchResultList = searchHandler.search(medicine, location);
+    public ResponseEntity<SearchResponse> search(@RequestParam("medicine") String medicine, @RequestParam("location") String location,
+                                                 @RequestParam("category") String category) {
+        List<SearchResult> searchResultList = searchHandler.search(medicine, location, category);
         SearchResponse searchResponse = new SearchResponse();
         searchResponse.setSearchResultList(searchResultList);
         return ResponseEntity.status(HttpStatus.OK).body(searchResponse);

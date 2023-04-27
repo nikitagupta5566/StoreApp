@@ -2,11 +2,13 @@ package com.kosuri.stores.handler;
 
 import com.kosuri.stores.dao.RoleEntity;
 import com.kosuri.stores.dao.RoleRepository;
+import com.kosuri.stores.exception.APIException;
 import com.kosuri.stores.model.response.GetAllRolesResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -20,9 +22,6 @@ public class RoleHandler {
         roleEntity.setRoleId(roleId);
         roleEntity.setRoleName(roleName);
 
-
-        long roles = roleRepository.count();
-        System.out.println("fetching repository " + roles);
         try {
             roleRepository.save(roleEntity);
         }catch(Exception e){
@@ -36,6 +35,15 @@ public class RoleHandler {
         roleRepository.findAll().forEach(role -> roleList.add(role));
         response.setRoleList(roleList);
         return response;
+    }
+
+    public Integer getRoleIdFromRoleName(String name) throws Exception {
+        Optional<RoleEntity> role = roleRepository.findByRoleName(name);
+        if (role.isPresent()) {
+            return role.get().getRoleId();
+        }
+
+        throw new APIException("Role not found");
     }
 
 

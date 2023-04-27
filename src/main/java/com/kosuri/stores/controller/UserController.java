@@ -4,6 +4,7 @@ import com.kosuri.stores.exception.APIException;
 import com.kosuri.stores.handler.UserHandler;
 import com.kosuri.stores.model.request.AddUserRequest;
 import com.kosuri.stores.model.request.LoginUserRequest;
+import com.kosuri.stores.model.response.LoginUserResponse;
 import jakarta.validation.Valid;
 import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,21 +40,22 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginUserRequest request) {
+    public ResponseEntity<LoginUserResponse> login(@Valid @RequestBody LoginUserRequest request) {
         HttpStatus httpStatus;
+        LoginUserResponse response = new LoginUserResponse();
         String body;
         try {
-            userHandler.loginUser(request);
+            response = userHandler.loginUser(request);
             httpStatus = HttpStatus.OK;
-            body = "User logged in successfully!";
+            response.setResponseMessage("User logged in successfully!");
         } catch (APIException e) {
             httpStatus = HttpStatus.BAD_REQUEST;
-            body = e.getMessage();
+            response.setResponseMessage(e.getMessage());
         }
         catch (Exception e) {
             httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
-            body = e.getMessage();
+            response.setResponseMessage(e.getMessage());
         }
-        return new ResponseEntity<>(body, httpStatus);
+        return ResponseEntity.status(httpStatus).body(response);
     }
 }

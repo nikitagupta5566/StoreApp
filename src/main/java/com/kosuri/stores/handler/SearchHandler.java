@@ -22,15 +22,18 @@ public class SearchHandler {
     @Autowired
     StoreRepository storeRepository;
 
-    public List<SearchResult> search(String medicine, String location) {
+    public List<SearchResult> search(String medicine, String location, String category) {
 
         List<SearchResult> searchResultList = new ArrayList<>();
 
         Optional<List<StoreEntity>> storeList = storeRepository.findByLocationContaining(location);
         if (storeList.isPresent()) {
             for (StoreEntity storeEntity : storeList.get()) {
-                List<StockEntity> availableStockEntity = stockRepository.findByItemNameContainingAndStoreIdAndBalQuantityGreaterThan(medicine,
-                        storeEntity.getId(), 0D);
+                if (storeEntity.getName().equals("DUMMY")) {
+                    continue;
+                }
+                List<StockEntity> availableStockEntity = stockRepository.findByItemNameContainingAndStoreIdAndItemCategoryAndBalQuantityGreaterThan(medicine,
+                        storeEntity.getId(), category, 0D);
 
                 for (StockEntity stockEntity : availableStockEntity) {
                     SearchResult searchResult = new SearchResult();
