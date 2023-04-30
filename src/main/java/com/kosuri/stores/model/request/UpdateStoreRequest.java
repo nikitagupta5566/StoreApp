@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 public class UpdateStoreRequest {
     @NotNull
     private String storeType;
+    @NotNull
     private String id;
     @NotNull
     private String name;
@@ -26,7 +27,6 @@ public class UpdateStoreRequest {
     private String ownerAddress;
     @NotNull
     private String ownerContact;
-    @NotNull
     private String secondaryContact;
     @NotNull
     private String ownerEmail;

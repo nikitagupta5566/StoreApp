@@ -9,46 +9,28 @@ import jakarta.validation.constraints.NotNull;
 @Entity
 @Table(name = "store_info")
 public class StoreEntity {
-    @NotNull
     private @Column(name = "Store_Category") String type;
     @Id
     @NotNull
     private @Column(name = "Store_ID") String id;
-    @NotNull
     private @Column(name = "Store_Name") String name;
-    @NotNull
     private @Column(name = "Pincode") String pincode;
-    @NotNull
     private @Column(name = "Village") String district;
-    @NotNull
     private @Column(name = "State") String state;
     @NotNull
     private @Column(name = "Location") String location;
-    @NotNull
     private @Column(name = "Contact_Person_Name") String owner;
-    @NotNull
     private @Column(name = "Phone_Number") String ownerContact;
-    @NotNull
     private @Column(name = "Secondary_Phone") String secondaryContact;
-    @NotNull
     private @Column(name = "Emailid") String ownerEmail;
-    @NotNull
     private @Column(name = "Reg_Date") String registrationDate;
-    @NotNull
     private @Column(name = "Time_Stamp") String creationTimeStamp;
-    @NotNull
     private @Column(name = "Role") String role;
-    @NotNull
     private @Column(name = "Added_By") String addedBy;
-    @NotNull
     private @Column(name = "Modified_By") String modifiedBy;
-    @NotNull
     private @Column(name = "Modified_Date") String modifiedDate;
-    @NotNull
     private @Column(name = "Modified_Time_Stamp") String modifiedTimeStamp;
-    @NotNull
     private @Column(name = "Status") String status;
-    @NotNull
     private @Column(name = "Password") String password;
 
     public String getType() {

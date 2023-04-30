@@ -2,6 +2,7 @@ package com.kosuri.stores.handler;
 
 import com.kosuri.stores.dao.StoreEntity;
 import com.kosuri.stores.dao.StoreRepository;
+import com.kosuri.stores.exception.APIException;
 import com.kosuri.stores.model.request.CreateStoreRequest;
 import com.kosuri.stores.model.request.UpdateStoreRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +23,17 @@ public class StoreHandler {
     private StoreRepository storeRepository;
 
     public String addStore(CreateStoreRequest createStoreRequest) throws Exception{
-        StoreEntity storeEntity = repositoryHandler.addStoreToRepository(createStoreEntityFromRequest(createStoreRequest));
-        return storeEntity.getId();
+        if(validateStoreInputs(createStoreRequest)) {
+            StoreEntity storeEntity = repositoryHandler.addStoreToRepository(createStoreEntityFromRequest(createStoreRequest));
+        }
+        return createStoreRequest.getId();
     }
 
     public String updateStore(UpdateStoreRequest updateStoreRequest) throws Exception {
-        StoreEntity storeEntity = repositoryHandler.updateStore(updateStoreEntityFromRequest(updateStoreRequest));
-        return storeEntity.getId();
+        if(validateUpdateStoreInputs(updateStoreRequest)) {
+            StoreEntity storeEntity = repositoryHandler.updateStore(updateStoreEntityFromRequest(updateStoreRequest));
+        }
+        return updateStoreRequest.getId();
     }
 
     public String getStoreIdFromStoreOwner(String emailId) {
@@ -71,12 +76,12 @@ public class StoreHandler {
         storeEntity.setSecondaryContact(createStoreRequest.getSecondaryContact());
         storeEntity.setRegistrationDate(LocalDate.now().toString());
         storeEntity.setCreationTimeStamp(LocalDateTime.now().toString());
-        storeEntity.setRole("test");
+//        storeEntity.setRole("test");
         storeEntity.setModifiedBy("test_user");
         storeEntity.setModifiedDate(LocalDate.now().toString());
         storeEntity.setModifiedTimeStamp(LocalDateTime.now().toString());
         storeEntity.setStatus("Active");
-        storeEntity.setPassword("test");
+//        storeEntity.setPassword("test");
         storeEntity.setAddedBy(createStoreRequest.getOwner());
         storeEntity.setLocation(createStoreRequest.getLocation());
 
@@ -109,5 +114,65 @@ public class StoreHandler {
         storeEntity.setLocation(request.getLocation());
 
         return storeEntity;
+    }
+
+    boolean validateStoreInputs(CreateStoreRequest request) throws Exception{
+        Optional<StoreEntity> store = storeRepository.findById(request.getId());
+        if(store.isPresent()){
+            throw new APIException("Store with id is already present in system");
+        }
+
+        Optional<List<StoreEntity>> store2 = storeRepository.findByOwnerEmailOrOwnerContact(request.getOwnerEmail(), request.getOwnerContact());
+        if(!store2.get().isEmpty()){
+            for(StoreEntity s: store2.get()){
+                if(!s.getId().contains("DUMMY")){
+                    throw new APIException("Store with owner email/contact is already present in system");
+                }
+            }
+        }
+        boolean isUserPresent = false;
+        if(!store2.get().isEmpty()){
+            for(StoreEntity s: store2.get()){
+                if(s.getId().contains("DUMMY") && s.getRole().equals("STORE_MANAGER")){
+                    isUserPresent = true;
+                }
+            }
+        }
+
+        if(!isUserPresent){
+            throw new APIException("Store owner not present as user in system");
+
+        }
+        return true;
+    }
+
+    boolean validateUpdateStoreInputs(UpdateStoreRequest request) throws Exception{
+        Optional<StoreEntity> store = storeRepository.findById(request.getId());
+        if(!store.isPresent()){
+            throw new APIException("Store with id not found");
+        }
+
+        Optional<List<StoreEntity>> store2 = storeRepository.findByOwnerEmailOrOwnerContact(request.getOwnerEmail(), request.getOwnerContact());
+        if(!store2.get().isEmpty()){
+            for(StoreEntity s: store2.get()){
+                if(!s.getId().contains("DUMMY") && s.getId() != request.getId()){
+                    throw new APIException("Store with owner email/contact is already present in system");
+                }
+            }
+        }
+        boolean isUserPresent = false;
+        if(!store2.get().isEmpty()){
+            for(StoreEntity s: store2.get()){
+                if(s.getId().contains("DUMMY") && s.getRole().equals("STORE_MANAGER")){
+                    isUserPresent = true;
+                }
+            }
+        }
+
+        if(!isUserPresent){
+            throw new APIException("Store owner not present as user in system");
+
+        }
+        return true;
     }
 }

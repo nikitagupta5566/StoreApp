@@ -22,6 +22,9 @@ public class RepositoryHandler {
     @Autowired
     private SaleRepository saleRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     public StoreEntity addStoreToRepository(@Valid StoreEntity storeEntity) throws Exception {
         Optional<StoreEntity> store = storeRepository.findById(storeEntity.getId());
         boolean storeExistsByOwnerEmail = storeRepository.existsByOwnerEmail(storeEntity.getOwnerEmail());
@@ -49,18 +52,11 @@ public class RepositoryHandler {
 
     public void addUser(@Valid StoreEntity storeEntity, AddUserRequest request) throws Exception {
         //TODO Update to query based on id
-        Optional<StoreEntity> store = storeRepository.findById(request.getStoreId());
-        if(request.getRole().equals(Role.STORE_MANAGER) && store.isEmpty()){
-            System.out.println("No store found for user");
-            throw new APIException("Store with this id not found for user!");
+        Optional<RoleEntity> role = roleRepository.findByRoleName(request.getRole());
+        if(!role.isPresent()){
+            throw new APIException("Role does not exist. Please enter a valid role");
         }
-        if(!store.isEmpty()) {
-            store.get().setOwner(request.getName());
-            store.get().setOwnerEmail(request.getEmail());
-            store.get().setOwnerContact(request.getPhoneNumber());
 
-            storeRepository.save(store.get());
-        }
         storeRepository.save(storeEntity);
 
     }

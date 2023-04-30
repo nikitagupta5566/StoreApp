@@ -60,21 +60,13 @@ public class UserHandler {
         storeEntity.setPassword(request.getPassword());
 
         //setting dummy parameters.
-        storeEntity.setId("DUMMY" + request.getPhoneNumber());
-//        storeEntity.setId(((int) Math.random()));
-        storeEntity.setType("DUMMY");
-        storeEntity.setName("DUMMY");
-        storeEntity.setPincode("DUMMY");
-        storeEntity.setDistrict("DUMMY");
-        storeEntity.setState("DUMMY");
-        storeEntity.setSecondaryContact("DUMMY");
-        storeEntity.setRegistrationDate(LocalDate.now().toString());
-        storeEntity.setCreationTimeStamp(LocalDateTime.now().toString());
-        storeEntity.setModifiedBy("test_user");
-        storeEntity.setModifiedDate(LocalDate.now().toString());
-        storeEntity.setModifiedTimeStamp(LocalDateTime.now().toString());
-        storeEntity.setStatus("DUMMY");
-        storeEntity.setAddedBy("test_user");
+        if(request.getPhoneNumber() != null){
+            storeEntity.setId("DUMMY" + request.getPhoneNumber());
+
+        }else{
+            storeEntity.setId("DUMMY" + request.getEmail());
+        }
+        storeEntity.setAddedBy("admin");
 
         return storeEntity;
     }

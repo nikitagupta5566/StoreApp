@@ -23,8 +23,6 @@ public class AddUserRequest extends RequestEntity<AddUserRequest> {
     private String email;
     @NotNull
     private String role;
-    private String storeId;
-
     @NotNull
     private String password;
 
@@ -66,14 +64,6 @@ public class AddUserRequest extends RequestEntity<AddUserRequest> {
 
     public void setRole(String role) {
         this.role = role;
-    }
-
-    public String getStoreId() {
-        return storeId;
-    }
-
-    public void setStoreId(String storeId) {
-        this.storeId = storeId;
     }
 
     public String getPassword() {
