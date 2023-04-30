@@ -10,11 +10,15 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class UserHandler {
     @Autowired
     private RepositoryHandler repositoryHandler;
+
+    @Autowired
+    private StoreHandler storeHandler;
 
     @Autowired
     private RoleHandler roleHandler;
@@ -38,9 +42,11 @@ public class UserHandler {
         }
 
         StoreEntity storeEntity = repositoryHandler.loginUser(request);
+        String storeId = storeHandler.getStoreIdFromStoreOwner(request.getEmail());
         Integer roleId = roleHandler.getRoleIdFromRoleName(storeEntity.getRole());
         response.setRoleName(storeEntity.getRole());
         response.setRoleId(roleId);
+        response.setStoreId(storeId);
         return response;
     }
 

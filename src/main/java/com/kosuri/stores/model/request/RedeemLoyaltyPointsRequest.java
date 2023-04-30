@@ -17,6 +17,16 @@ public class RedeemLoyaltyPointsRequest {
 
     private Integer loyaltyPoints;
 
+    private String storeId;
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+
     public Date getDateOfDiscount() {
         return dateOfDiscount;
     }

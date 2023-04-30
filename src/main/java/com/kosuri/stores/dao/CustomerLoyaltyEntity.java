@@ -6,8 +6,10 @@ import java.util.Date;
 
 @Entity
 @Table(name = "customer_loyalty")
+@IdClass(CustomerLoyaltyEntityId.class)
 public class CustomerLoyaltyEntity {
     @Column(name = "Customer_Name")
+    @Id
     private String customerName;
 
     public String getCustomerPhone() {
@@ -33,7 +35,19 @@ public class CustomerLoyaltyEntity {
 
     @Column(name = "Discounted_Date")
     @Temporal(TemporalType.DATE)
+    @Id
     private Date discountedDate;
+
+    @Column(name = "Store_ID")
+    private String storeId;
+
+    public String getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
 
     public String getCustomerName() {
         return customerName;

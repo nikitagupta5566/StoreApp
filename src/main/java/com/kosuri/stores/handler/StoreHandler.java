@@ -1,6 +1,7 @@
 package com.kosuri.stores.handler;
 
 import com.kosuri.stores.dao.StoreEntity;
+import com.kosuri.stores.dao.StoreRepository;
 import com.kosuri.stores.model.request.CreateStoreRequest;
 import com.kosuri.stores.model.request.UpdateStoreRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +11,16 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class StoreHandler {
     @Autowired
     private RepositoryHandler repositoryHandler;
+
+    @Autowired
+    private StoreRepository storeRepository;
+
     public String addStore(CreateStoreRequest createStoreRequest) throws Exception{
         StoreEntity storeEntity = repositoryHandler.addStoreToRepository(createStoreEntityFromRequest(createStoreRequest));
         return storeEntity.getId();
@@ -23,6 +29,19 @@ public class StoreHandler {
     public String updateStore(UpdateStoreRequest updateStoreRequest) throws Exception {
         StoreEntity storeEntity = repositoryHandler.updateStore(updateStoreEntityFromRequest(updateStoreRequest));
         return storeEntity.getId();
+    }
+
+    public String getStoreIdFromStoreOwner(String emailId) {
+        Optional<List<StoreEntity>> entity = storeRepository.findByOwnerEmail(emailId);
+        if (entity.isPresent()) {
+            for (StoreEntity store: entity.get()) {
+                if (store.getName().contains("DUMMY")) {
+                    continue;
+                }
+                return store.getId();
+            }
+        }
+        return "";
     }
 
     public List<StoreEntity> getAllStores() throws Exception{

@@ -66,6 +66,7 @@ public class LoyaltyPointsHandler {
         customerLoyaltyEntity.setTotalSales(request.getTotalSales());
         customerLoyaltyEntity.setDiscountAmount(request.getDiscountAmount());
         customerLoyaltyEntity.setDiscountedDate(request.getDateOfDiscount());
+        customerLoyaltyEntity.setStoreId(request.getStoreId());
 
         customerLoyaltyRepository.save(customerLoyaltyEntity);
     }

@@ -16,8 +16,11 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+
+import static com.fasterxml.jackson.databind.type.LogicalType.Array;
 
 
 @Service
@@ -37,7 +40,14 @@ public class TaskHandler {
     }
 
     public void mapTaskRoleEntityFromRequest(MapTaskForRoleRequest request) throws Exception {
-
+        List<TaskRoleEntity> existingTaskForRole = new ArrayList<>();
+        existingTaskForRole = taskRoleRepository.findByRoleId(request.getRoleId());
+        for(TaskRoleEntity temp: existingTaskForRole ){
+            boolean check = Arrays.asList(request.getTaskIds()).contains(temp.getTaskId());
+            if(!check){
+                taskRoleRepository.delete(temp);
+            }
+        }
         for(Integer taskId: request.getTaskIds()) {
             TaskRoleEntity tempTaskRole = new TaskRoleEntity();
             tempTaskRole.setTaskId(taskId);
