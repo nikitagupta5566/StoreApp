@@ -16,8 +16,8 @@ public class GenerateReportRequest extends RequestEntity<GenerateReportRequest> 
     @NotNull
     private String storeId;
     private String vendorName;
-    private Date dateFrom;
-    private Date dateTo;
+    private String dateFrom;
+    private String dateTo;
     private String productType;
 
     public String getStoreId() {
@@ -36,19 +36,19 @@ public class GenerateReportRequest extends RequestEntity<GenerateReportRequest> 
         this.vendorName = vendorName;
     }
 
-    public Date getDateFrom() {
+    public String getDateFrom() {
         return dateFrom;
     }
 
-    public void setDateFrom(Date dateFrom) {
+    public void setDateFrom(String dateFrom) {
         this.dateFrom = dateFrom;
     }
 
-    public Date getDateTo() {
+    public String getDateTo() {
         return dateTo;
     }
 
-    public void setDateTo(Date dateTo) {
+    public void setDateTo(String dateTo) {
         this.dateTo = dateTo;
     }
 

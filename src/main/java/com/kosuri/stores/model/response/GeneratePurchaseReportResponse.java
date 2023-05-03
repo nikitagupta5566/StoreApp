@@ -7,13 +7,10 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
-public class GeneratePurchaseReportResponse  extends ResponseEntity<GeneratePurchaseReportResponse> {
+public class GeneratePurchaseReportResponse {
     private List<PurchaseReportRecord> purchaseReport;
 
     private String msg;
-    public GeneratePurchaseReportResponse(HttpStatusCode status) {
-        super(status);
-    }
 
     public List<PurchaseReportRecord> getPurchaseReport() {
         return purchaseReport;
