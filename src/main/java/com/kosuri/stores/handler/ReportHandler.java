@@ -30,7 +30,7 @@ public class ReportHandler {
         List<PurchaseReportRecord> purchaseReport = new ArrayList<>();
 
         for (PurchaseEntity purchaseEntity : purchaseRecords.get()) {
-            if (validateRecord(request, purchaseEntity.getDate()) && validateVendorAndProduct(request, purchaseEntity.getSuppName(), purchaseEntity.getItemCat())) {
+            if (validateRecord(request, purchaseEntity.getDate()) && validateVendorAndProduct(request, purchaseEntity.getSuppName(), purchaseEntity.getCatName())) {
                 PurchaseReportRecord record = new PurchaseReportRecord();
                 record.setStoreId(purchaseEntity.getStoreId());
                 record.setDate(purchaseEntity.getDate());
@@ -112,7 +112,7 @@ public class ReportHandler {
         }
 
         GenerateSaleReportResponse response = new GenerateSaleReportResponse();
-        response.setPurchaseReport(purchaseReport);
+        response.setSaleReport(purchaseReport);
 
         return response;
     }

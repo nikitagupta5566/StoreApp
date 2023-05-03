@@ -8,18 +8,18 @@ public class RoleEntity {
 
     @Id
     @Column(name="Roleid")
-    private Integer roleId;
+    private String roleId;
 
     @Column(name="Role_Name",nullable = true, length = 45)
     private String roleName;
 
 
-    public Integer getRoleId() {
+    public String getRoleId() {
         return roleId;
     }
 
 
-    public void setRoleId(Integer roleId) {
+    public void setRoleId(String roleId) {
         this.roleId = roleId;
     }
 

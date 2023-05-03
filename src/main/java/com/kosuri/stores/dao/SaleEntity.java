@@ -22,7 +22,8 @@ public class SaleEntity {
     @Temporal(TemporalType.DATE)
     private Date date;
     @Column(name = "Time")
-    private String time;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date time;
     @Column(name="Cust_Code",nullable = true, length = 45)
     private String custCode;
     @Column(name="Cust_Name",nullable = true, length = 45)
@@ -151,10 +152,10 @@ public class SaleEntity {
     public void setDate(Date date) {
         this.date = date;
     }
-    public String getTime() {
+    public Date getTime() {
         return time;
     }
-    public void setTime(String time) {
+    public void setTime(Date time) {
         this.time = time;
     }
     public String getCustCode() {

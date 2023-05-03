@@ -17,7 +17,7 @@ public class RoleHandler {
     private RoleRepository roleRepository;
 
 
-    public void createRoleEntityFromRequest(Integer roleId, String roleName){
+    public void createRoleEntityFromRequest(String roleId, String roleName){
         RoleEntity roleEntity = new RoleEntity();
         roleEntity.setRoleId(roleId);
         roleEntity.setRoleName(roleName);
@@ -37,7 +37,7 @@ public class RoleHandler {
         return response;
     }
 
-    public Integer getRoleIdFromRoleName(String name) throws Exception {
+    public String getRoleIdFromRoleName(String name) throws Exception {
         Optional<RoleEntity> role = roleRepository.findByRoleName(name);
         if (role.isPresent()) {
             return role.get().getRoleId();

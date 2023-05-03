@@ -2,7 +2,7 @@ package com.kosuri.stores.model.response;
 
 public class LoginUserResponse extends GenericResponse {
     private String roleName;
-    private Integer roleId;
+    private String roleId;
 
     private String storeId;
 
@@ -13,11 +13,11 @@ public class LoginUserResponse extends GenericResponse {
         this.storeId = storeId;
     }
 
-    public Integer getRoleId() {
+    public String getRoleId() {
         return roleId;
     }
 
-    public void setRoleId(Integer roleId) {
+    public void setRoleId(String roleId) {
         this.roleId = roleId;
     }
 

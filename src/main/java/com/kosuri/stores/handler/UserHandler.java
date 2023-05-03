@@ -6,11 +6,10 @@ import com.kosuri.stores.model.request.AddUserRequest;
 import com.kosuri.stores.model.request.LoginUserRequest;
 import com.kosuri.stores.model.response.LoginUserResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 public class UserHandler {
@@ -28,9 +27,11 @@ public class UserHandler {
             return false;
         }
         StoreEntity userStoreEntity = getEntityFromUserRequest(request);
-
-        repositoryHandler.addUser(userStoreEntity, request);
-
+        try {
+            repositoryHandler.addUser(userStoreEntity, request);
+        } catch (DataIntegrityViolationException e) {
+            throw new Exception(e.getCause().getCause().getMessage());
+        }
         return true;
     }
 
@@ -43,7 +44,7 @@ public class UserHandler {
 
         StoreEntity storeEntity = repositoryHandler.loginUser(request);
         String storeId = storeHandler.getStoreIdFromStoreOwner(request.getEmail());
-        Integer roleId = roleHandler.getRoleIdFromRoleName(storeEntity.getRole());
+        String roleId = roleHandler.getRoleIdFromRoleName(storeEntity.getRole());
         response.setRoleName(storeEntity.getRole());
         response.setRoleId(roleId);
         response.setStoreId(storeId);
@@ -58,6 +59,7 @@ public class UserHandler {
         storeEntity.setLocation(request.getAddress());
         storeEntity.setRole(request.getRole());
         storeEntity.setPassword(request.getPassword());
+        storeEntity.setCreationTimeStamp(LocalDateTime.now().toString());
 
         //setting dummy parameters.
         if(request.getPhoneNumber() != null){

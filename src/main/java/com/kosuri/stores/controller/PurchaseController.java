@@ -36,7 +36,7 @@ public class PurchaseController {
             response.setResponseMessage(e.getMessage());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
         } catch (Exception e) {
-            response.setResponseMessage(e.getMessage());
+            response.setResponseMessage(e.getCause().getCause().getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
 

@@ -11,12 +11,12 @@ public class GenerateSaleReportResponse {
     private List<SaleReportRecord> saleReport;
     private String msg;
 
-    public List<SaleReportRecord> getPurchaseReport() {
+    public List<SaleReportRecord> getSaleReport() {
         return saleReport;
     }
 
-    public void setPurchaseReport(List<SaleReportRecord> purchaseReport) {
-        this.saleReport = purchaseReport;
+    public void setSaleReport(List<SaleReportRecord> saleReport) {
+        this.saleReport = saleReport;
     }
 
     public String getMsg() {

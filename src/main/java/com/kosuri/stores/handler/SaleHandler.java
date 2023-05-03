@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -27,8 +28,8 @@ public class SaleHandler {
     @Autowired
     private StoreRepository storeRepository;
 
-    @Transactional
-    public void createSaleEntityFromRequest(MultipartFile reapExcelDataFile, String storeId, String emailId) throws Exception{
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class})
+    public void createSaleEntityFromRequest(MultipartFile reapExcelDataFile, String storeId, String emailId) throws Exception {
 
         Optional<StoreEntity> store = storeRepository.findById(storeId);
         if (store.isPresent()) {
@@ -42,22 +43,29 @@ public class SaleHandler {
         XSSFWorkbook workbook = new XSSFWorkbook(reapExcelDataFile.getInputStream());
         XSSFSheet worksheet = workbook.getSheetAt(0);
 
-        for(int i=4;i<worksheet.getPhysicalNumberOfRows() ;i++) {
+        for (int i = 4; i < worksheet.getPhysicalNumberOfRows(); i++) {
             SaleEntity tempSale = new SaleEntity();
             XSSFRow row = worksheet.getRow(i);
-            tempSale.setDoc_Number(row.getCell(0).getStringCellValue());
+            tempSale.setDoc_Number(String.valueOf(new BigDecimal(row.getCell(0).getNumericCellValue()).toBigInteger()));
             tempSale.setReadableDocNo(row.getCell(1).getStringCellValue());
             tempSale.setDate(row.getCell(2).getDateCellValue());
-            tempSale.setTime(String.valueOf(row.getCell(3).getStringCellValue()));
+            tempSale.setTime(row.getCell(3).getDateCellValue());
             tempSale.setCustCode(row.getCell(4).getStringCellValue());
             tempSale.setCustName(row.getCell(5).getStringCellValue());
 
-
             tempSale.setPatientName(row.getCell(6).getStringCellValue());
-            tempSale.setCreatedUser(row.getCell(7).getStringCellValue());
-            tempSale.setItemCode(row.getCell(8).getStringCellValue());
+            tempSale.setCreatedUser(String.valueOf(row.getCell(7).getNumericCellValue()));
+            try {
+                tempSale.setItemCode(row.getCell(8).getStringCellValue());
+            } catch (Exception e) {
+                tempSale.setItemCode(String.valueOf(row.getCell(8).getNumericCellValue()));
+            }
             tempSale.setItemName(row.getCell(9).getStringCellValue());
-            tempSale.setBatchNo(row.getCell(10).getStringCellValue());
+            try {
+                tempSale.setBatchNo(row.getCell(10).getStringCellValue());
+            } catch (Exception e) {
+                tempSale.setBatchNo(String.valueOf(row.getCell(10).getNumericCellValue()));
+            }
             tempSale.setExpiryDate(row.getCell(11).getDateCellValue());
             tempSale.setMfacCode(row.getCell(12).getStringCellValue());
             tempSale.setMfacName(row.getCell(13).getStringCellValue());
@@ -67,7 +75,7 @@ public class SaleHandler {
             tempSale.setPacking(row.getCell(17).getStringCellValue());
             tempSale.setQtyBox(row.getCell(18).getNumericCellValue());
             tempSale.setQty(row.getCell(19).getNumericCellValue());
-            tempSale.setSchQty((int)row.getCell(20).getNumericCellValue());
+            tempSale.setSchQty((int) row.getCell(20).getNumericCellValue());
             tempSale.setSchDisc(row.getCell(21).getNumericCellValue());
             tempSale.setSaleRate(row.getCell(22).getNumericCellValue());
             tempSale.setmRP(row.getCell(23).getNumericCellValue());
@@ -75,27 +83,36 @@ public class SaleHandler {
             tempSale.setDiscPerct(row.getCell(25).getNumericCellValue());
             tempSale.setDiscValue(row.getCell(26).getNumericCellValue());
             tempSale.setTaxableAmt(row.getCell(27).getNumericCellValue());
-            tempSale.setcGSTPer((int)row.getCell(28).getNumericCellValue());
+            tempSale.setcGSTPer((int) row.getCell(28).getNumericCellValue());
             tempSale.setcGSTAmt(row.getCell(29).getNumericCellValue());
-            tempSale.setsGSTPer((int)row.getCell(30).getNumericCellValue());
+            tempSale.setsGSTPer((int) row.getCell(30).getNumericCellValue());
             tempSale.setsGSTAmt(row.getCell(31).getNumericCellValue());
-            tempSale.setiGSTPer((int)row.getCell(32).getNumericCellValue());
+            tempSale.setiGSTPer((int) row.getCell(32).getNumericCellValue());
             tempSale.setiGSTAmt(row.getCell(33).getNumericCellValue());
-            tempSale.setCessPer((int)row.getCell(34).getNumericCellValue());
+            tempSale.setCessPer((int) row.getCell(34).getNumericCellValue());
             tempSale.setCessAmt(row.getCell(35).getNumericCellValue());
-            tempSale.setAddCessPer((int)row.getCell(36).getNumericCellValue());
+            tempSale.setAddCessPer((int) row.getCell(36).getNumericCellValue());
             tempSale.setAddCessAmt(row.getCell(37).getNumericCellValue());
             tempSale.setTotal(row.getCell(38).getNumericCellValue());
             tempSale.setRoundOff(row.getCell(39).getNumericCellValue());
-            tempSale.setSuppBillNo(row.getCell(40).getStringCellValue());
+            try {
+                tempSale.setSuppBillNo(row.getCell(40).getStringCellValue());
+            } catch (Exception e) {
+                tempSale.setSuppBillNo(String.valueOf(row.getCell(41).getNumericCellValue()));
+            }
 
             tempSale.setSuppCode(row.getCell(42).getStringCellValue());
             tempSale.setSuppName(row.getCell(43).getStringCellValue());
             tempSale.setProfessional(row.getCell(44).getStringCellValue());
 
 
-            tempSale.setMobile(row.getCell(45).getStringCellValue());
-            tempSale.setLcCode(row.getCell(46).getStringCellValue());
+            tempSale.setMobile(String.valueOf(row.getCell(45).getNumericCellValue()));
+            try {
+                tempSale.setLcCode(row.getCell(46).getStringCellValue());
+            } catch (Exception e) {
+                tempSale.setLcCode(String.valueOf(row.getCell(46).getNumericCellValue()));
+            }
+
             tempSale.setPurRate(row.getCell(47).getNumericCellValue());
             tempSale.setPurRateWithGsT(row.getCell(48).getNumericCellValue());
             tempSale.setStoreId(storeId);
@@ -103,19 +120,14 @@ public class SaleHandler {
             saleArrayList.add(tempSale);
         }
 
-        try {
-            saleRepository.saveAll(saleArrayList);
+        saleRepository.saveAll(saleArrayList);
 
-            for(SaleEntity saleEntity: saleArrayList) {
-                updateStock(saleEntity);
-            }
-
-        }catch(Exception e){
-            System.out.println(e.getCause());
+        for (SaleEntity saleEntity : saleArrayList) {
+            updateStock(saleEntity, emailId);
         }
     }
 
-    private void updateStock(SaleEntity saleEntity) {
+    private void updateStock(SaleEntity saleEntity, String email) throws Exception {
         StockUpdateRequest stockUpdateRequest = new StockUpdateRequest();
         stockUpdateRequest.setExpiryDate(saleEntity.getExpiryDate());
         stockUpdateRequest.setBatch(saleEntity.getBatchNo());
@@ -129,6 +141,7 @@ public class SaleHandler {
         stockUpdateRequest.setStoreId(saleEntity.getStoreId());
         stockUpdateRequest.setMrpPack(saleEntity.getmRP());
         stockUpdateRequest.setSupplierName(saleEntity.getSuppName());
+        stockUpdateRequest.setUpdatedBy(email);
 
         stockHandler.updateStock(stockUpdateRequest);
     }

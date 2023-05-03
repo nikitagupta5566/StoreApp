@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +32,7 @@ public class PurchaseHandler {
     @Autowired
     private StoreRepository storeRepository;
 
-    @Transactional
+    @Transactional(rollbackFor = {Exception.class, RuntimeException.class})
     public void createPurchaseEntityFromRequest(MultipartFile reapExcelDataFile, String storeId, String emailId) throws Exception {
 
         Optional<StoreEntity> store = storeRepository.findById(storeId);
@@ -50,12 +51,12 @@ public class PurchaseHandler {
 
             XSSFRow row = worksheet.getRow(i);
 
-            tempPurchase.setDoc_Number(String.valueOf(row.getCell(0).getNumericCellValue()));
+            tempPurchase.setDoc_Number(String.valueOf(new BigDecimal(row.getCell(0).getNumericCellValue()).toBigInteger()));
             tempPurchase.setReadableDocNo(row.getCell(1).getStringCellValue());
             tempPurchase.setDate(row.getCell(2).getDateCellValue());
             tempPurchase.setBillNo(row.getCell(3).getStringCellValue());
             tempPurchase.setBillDt(row.getCell(4).getDateCellValue());
-            tempPurchase.setItemCode(row.getCell(5).getStringCellValue());
+            tempPurchase.setItemCode(String.valueOf(row.getCell(5).getNumericCellValue()));
             tempPurchase.setItemName(row.getCell(6).getStringCellValue());
             tempPurchase.setBatchNo(row.getCell(7).getStringCellValue());
             tempPurchase.setExpiryDate(row.getCell(8).getDateCellValue());
@@ -67,7 +68,7 @@ public class PurchaseHandler {
             tempPurchase.setPacking(row.getCell(14).getStringCellValue());
             tempPurchase.setDcYear(row.getCell(15).getStringCellValue());
             tempPurchase.setDcPrefix(row.getCell(16).getStringCellValue());
-            tempPurchase.setDcSrno(row.getCell(17).getStringCellValue());
+            tempPurchase.setDcSrno(String.valueOf(row.getCell(17).getNumericCellValue()));
             tempPurchase.setQty(row.getCell(18).getNumericCellValue());
             tempPurchase.setPackQty(row.getCell(19).getNumericCellValue());
             tempPurchase.setLooseQty(row.getCell(20).getNumericCellValue());
@@ -84,7 +85,7 @@ public class PurchaseHandler {
             tempPurchase.setSuppName(row.getCell(31).getStringCellValue());
             tempPurchase.setDiscValue(row.getCell(32).getNumericCellValue());
             tempPurchase.setTaxableAmt(row.getCell(33).getNumericCellValue());
-            tempPurchase.setGstCode(row.getCell(34).getStringCellValue());
+            tempPurchase.setGstCode(String.valueOf(row.getCell(34).getNumericCellValue()));
             tempPurchase.setcGSTPer((int)row.getCell(35).getNumericCellValue());
             tempPurchase.setcGSTAmt(row.getCell(36).getNumericCellValue());
             tempPurchase.setsGSTPer((int)row.getCell(37).getNumericCellValue());
@@ -99,14 +100,26 @@ public class PurchaseHandler {
             purchaseArrayList.add(tempPurchase);
         }
 
-        purchaseRepository.saveAll(purchaseArrayList);
+//        for (PurchaseEntity purchaseEntity: purchaseArrayList) {
+//            try {
+//                purchaseRepository.save(purchaseEntity);
+//            } catch (Exception e) {
+//                System.out.println("hi");
+//            }
+//
+//        }
+        try {
+            purchaseRepository.saveAll(purchaseArrayList);
+        } catch (Exception e) {
+            throw new APIException(e.getCause().getCause().toString());
+        }
 
         for(PurchaseEntity purchaseEntity: purchaseArrayList) {
-            updateStock(purchaseEntity);
+            updateStock(purchaseEntity, emailId);
         }
     }
 
-    private void updateStock(PurchaseEntity purchaseEntity) {
+    private void updateStock(PurchaseEntity purchaseEntity, String emailId) throws Exception {
         StockUpdateRequest stockUpdateRequest = new StockUpdateRequest();
         stockUpdateRequest.setExpiryDate(purchaseEntity.getExpiryDate());
         stockUpdateRequest.setBalLooseQuantity(purchaseEntity.getLooseQty());
@@ -124,6 +137,7 @@ public class PurchaseHandler {
         stockUpdateRequest.setMrpPack(purchaseEntity.getmRP());
         stockUpdateRequest.setTotalPurchaseValueAfterGST(purchaseEntity.getTotal());
         stockUpdateRequest.setSupplierName(purchaseEntity.getSuppName());
+        stockUpdateRequest.setUpdatedBy(emailId);
 
         stockHandler.updateStock(stockUpdateRequest);
     }

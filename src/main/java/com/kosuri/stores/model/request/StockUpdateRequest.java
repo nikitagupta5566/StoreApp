@@ -39,6 +39,16 @@ public class StockUpdateRequest {
 
     private Double totalPurchaseValueAfterGST;
 
+    private String updatedBy;
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
     public Double getTotalPurchaseValueAfterGST() {
         return totalPurchaseValueAfterGST;
     }
