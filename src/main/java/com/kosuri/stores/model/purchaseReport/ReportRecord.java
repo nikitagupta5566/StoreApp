@@ -4,12 +4,12 @@ import java.util.Date;
 
 public abstract class ReportRecord {
     private String vendorName;
-    private Date date;
+    private String date;
     private String productType;
     private String storeId;
     private String batchNo;
-    private Date expiryDate;
-    private Date mfgDate;
+    private String  expiryDate;
+    private String mfgDate;
     private Double mrp;
     private Double discount;
     private Double gst;
@@ -22,14 +22,6 @@ public abstract class ReportRecord {
 
     public void setVendorName(String vendorName) {
         this.vendorName = vendorName;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
     }
 
     public String getProductType() {
@@ -54,22 +46,6 @@ public abstract class ReportRecord {
 
     public void setBatchNo(String batchNo) {
         this.batchNo = batchNo;
-    }
-
-    public Date getExpiryDate() {
-        return expiryDate;
-    }
-
-    public void setExpiryDate(Date expiryDate) {
-        this.expiryDate = expiryDate;
-    }
-
-    public Date getMfgDate() {
-        return mfgDate;
-    }
-
-    public void setMfgDate(Date mfgDate) {
-        this.mfgDate = mfgDate;
     }
 
     public Double getMrp() {
@@ -110,5 +86,29 @@ public abstract class ReportRecord {
 
     public void setPurchaseAmount(Double purchaseAmount) {
         this.purchaseAmount = purchaseAmount;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(String expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+    public String getMfgDate() {
+        return mfgDate;
+    }
+
+    public void setMfgDate(String mfgDate) {
+        this.mfgDate = mfgDate;
     }
 }

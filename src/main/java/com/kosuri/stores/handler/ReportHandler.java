@@ -35,12 +35,12 @@ public class ReportHandler {
             if (validateRecord(request, purchaseEntity.getDate()) && validateVendorAndProduct(request, purchaseEntity.getSuppName(), purchaseEntity.getCatName())) {
                 PurchaseReportRecord record = new PurchaseReportRecord();
                 record.setStoreId(purchaseEntity.getStoreId());
-                record.setDate(purchaseEntity.getDate());
+                record.setDate(formatter.format(purchaseEntity.getDate()));
                 record.setVendorName(purchaseEntity.getSuppName());
                 record.setProductType(purchaseEntity.getCatName());
                 record.setBatchNo(purchaseEntity.getBatchNo());
-                record.setExpiryDate(formatter.parse(purchaseEntity.getExpiryDate().toString()));
-                record.setMfgDate(formatter.parse(purchaseEntity.getDate().toString()));
+                record.setExpiryDate(formatter.format(purchaseEntity.getExpiryDate()));
+                record.setMfgDate(formatter.format(purchaseEntity.getDate()));
                 record.setMrp(purchaseEntity.getmRP());
                 record.setDiscount(purchaseEntity.getDiscValue());
                 record.setGst(purchaseEntity.getcGSTAmt());
@@ -99,12 +99,12 @@ public class ReportHandler {
             if (validateRecord(request, saleEntity.getDate()) && validateVendorAndProduct(request, saleEntity.getSuppName(), saleEntity.getCatName())) {
                 SaleReportRecord record = new SaleReportRecord();
                 record.setStoreId(saleEntity.getStoreId());
-                record.setDate(saleEntity.getDate());
+                record.setDate(formatter.format(saleEntity.getDate()));
                 record.setVendorName(saleEntity.getSuppName());
                 record.setProductType(saleEntity.getCatName());
                 record.setBatchNo(saleEntity.getBatchNo());
-                record.setExpiryDate(formatter.parse(saleEntity.getExpiryDate().toString()));
-                record.setMfgDate(formatter.parse(saleEntity.getDate().toString()));
+                record.setExpiryDate(formatter.format(saleEntity.getExpiryDate()));
+                record.setMfgDate(formatter.format(saleEntity.getDate()));
                 record.setMrp(saleEntity.getmRP());
                 record.setDiscount(saleEntity.getDiscValue());
                 record.setGst(saleEntity.getcGSTAmt());
