@@ -38,6 +38,10 @@ public class StockHandler {
                     curBalQuantity -= stockUpdateRequest.getBalLooseQuantity();
                 }
 
+                if (curBalQuantity < 0) {
+                    throw new APIException(String.format("Not Enough stock for Mf Name %s, item name %s, Batch %s Supplier Name %s", stockUpdateRequest.getMfName(), stockUpdateRequest.getItemName(), stockUpdateRequest.getBatch(), stockUpdateRequest.getSupplierName()));
+                }
+
                 currBalPackQuantity = curBalQuantity / stockUpdateRequest.getQtyPerBox();
                 currBalLooseQuantity = curBalQuantity - (currBalPackQuantity * stockUpdateRequest.getQtyPerBox());
 
@@ -58,7 +62,7 @@ public class StockHandler {
             } else {
 
             if (stockUpdateRequest.getStockUpdateRequestType() == StockUpdateRequestType.SALE) {
-                throw new APIException(String.format("Corresponding stock entity doesn't exist for Mf Name %s, item name %s, Batch %s", stockUpdateRequest.getMfName(), stockUpdateRequest.getItemName(), stockUpdateRequest.getBatch()));
+                throw new APIException(String.format("Corresponding stock entity doesn't exist for Mf Name %s, item name %s, Batch %s Supplier Name %s", stockUpdateRequest.getMfName(), stockUpdateRequest.getItemName(), stockUpdateRequest.getBatch(), stockUpdateRequest.getSupplierName()));
             }
                 StockEntity s = new StockEntity();
                 s.setItemName(stockUpdateRequest.getItemName());
