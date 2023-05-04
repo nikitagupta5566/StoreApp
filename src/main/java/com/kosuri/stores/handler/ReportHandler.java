@@ -71,11 +71,11 @@ public class ReportHandler {
     private boolean validateVendorAndProduct(GenerateReportRequest request, String vendor, String productType){
         boolean isValid = true;
 
-        if(!request.getVendorName().isEmpty() && request.getVendorName() != null && (vendor != null &&!vendor.equals(request.getVendorName()))){
+        if(request.getVendorName() != null && !request.getVendorName().isEmpty() && (vendor != null &&!vendor.equals(request.getVendorName()))){
             isValid = false;
         }
 
-        if (!request.getProductType().isEmpty() && request.getProductType() != null && (productType != null && !productType.equals(request.getProductType()))){
+        if (request.getProductType() != null && !request.getProductType().isEmpty() && (productType != null && !productType.equals(request.getProductType()))){
             isValid = false;
         }
 
