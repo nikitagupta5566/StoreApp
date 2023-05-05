@@ -122,26 +122,28 @@ public class StoreHandler {
             throw new APIException("Store with id is already present in system");
         }
 
-        Optional<List<StoreEntity>> store2 = storeRepository.findByOwnerEmailOrOwnerContact(request.getOwnerEmail(), request.getOwnerContact());
-        if(!store2.get().isEmpty()){
-            for(StoreEntity s: store2.get()){
-                if(!s.getId().contains("DUMMY")){
-                    throw new APIException("Store with owner email/contact is already present in system");
+        if(request.getOwnerEmail() != null && !request.getOwnerEmail().isEmpty() && request.getOwnerContact() != null && !request.getOwnerContact().isEmpty()){
+            Optional<List<StoreEntity>> store2 = storeRepository.findByOwnerEmailOrOwnerContact(request.getOwnerEmail(), request.getOwnerContact());
+            if(!store2.get().isEmpty()){
+                for(StoreEntity s: store2.get()){
+                    if(!s.getId().contains("DUMMY")){
+                        throw new APIException("Store with owner email/contact is already present in system");
+                    }
                 }
             }
-        }
-        boolean isUserPresent = false;
-        if(!store2.get().isEmpty()){
-            for(StoreEntity s: store2.get()){
-                if(s.getId().contains("DUMMY") && s.getRole().equals("STORE_MANAGER")){
-                    isUserPresent = true;
+            boolean isUserPresent = false;
+            if(!store2.get().isEmpty()){
+                for(StoreEntity s: store2.get()){
+                    if(s.getId().contains("DUMMY") && s.getRole().equals("STORE_MANAGER")){
+                        isUserPresent = true;
+                    }
                 }
             }
-        }
 
-        if(!isUserPresent){
-            throw new APIException("Store owner not present as user in system");
+            if(!isUserPresent){
+                throw new APIException("Store owner not present as user in system");
 
+            }
         }
         return true;
     }
@@ -152,26 +154,28 @@ public class StoreHandler {
             throw new APIException("Store with id not found");
         }
 
+        if(request.getOwnerEmail() != null && !request.getOwnerEmail().isEmpty() && request.getOwnerContact() != null && !request.getOwnerContact().isEmpty()){
         Optional<List<StoreEntity>> store2 = storeRepository.findByOwnerEmailOrOwnerContact(request.getOwnerEmail(), request.getOwnerContact());
-        if(!store2.get().isEmpty()){
-            for(StoreEntity s: store2.get()){
-                if(!s.getId().contains("DUMMY") && s.getId() != request.getId()){
-                    throw new APIException("Store with owner email/contact is already present in system");
+            if(!store2.get().isEmpty()){
+                for(StoreEntity s: store2.get()){
+                    if(!s.getId().contains("DUMMY") && s.getId() != request.getId()){
+                        throw new APIException("Store with owner email/contact is already present in system");
+                    }
                 }
             }
-        }
-        boolean isUserPresent = false;
-        if(!store2.get().isEmpty()){
-            for(StoreEntity s: store2.get()){
-                if(s.getId().contains("DUMMY") && s.getRole().equals("STORE_MANAGER")){
-                    isUserPresent = true;
+            boolean isUserPresent = false;
+            if(!store2.get().isEmpty()){
+                for(StoreEntity s: store2.get()){
+                    if(s.getId().contains("DUMMY") && s.getRole().equals("STORE_MANAGER")){
+                        isUserPresent = true;
+                    }
                 }
             }
-        }
 
-        if(!isUserPresent){
-            throw new APIException("Store owner not present as user in system");
+            if(!isUserPresent){
+                throw new APIException("Store owner not present as user in system");
 
+            }
         }
         return true;
     }
