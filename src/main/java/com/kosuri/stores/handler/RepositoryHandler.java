@@ -31,10 +31,6 @@ public class RepositoryHandler {
         if (store.isPresent()) {
             throw new APIException("Store with this id is already present");
         }
-
-        if(storeExistsByOwnerEmail) {
-            throw new APIException("Store with owner email is already present");
-        }
         return storeRepository.save(storeEntity);
 
     }
