@@ -74,16 +74,26 @@ public class LoyaltyPointsHandler {
     }
 
     public CustomerLoyaltyResponse getDiscountForCustomer(CustomerLoyaltyRequest request) throws Exception {
-        String name;
-        if (request.getFirstName() == null) {
+        String name = null;
+
+        if ((request.getFirstName() == null && request.getLastName() == null && request.getCustomerPhone() == null)
+        || (request.getFirstName().isEmpty() && request.getLastName().isEmpty() && request.getCustomerPhone().isEmpty())) {
+            throw new APIException("Please input customer name or phone no");
+        }
+
+        if (request.getFirstName() == null && request.getLastName() != null) {
             name = request.getLastName().trim();
-        } else if (request.getLastName() == null) {
+        } else if (request.getLastName() == null && request.getFirstName() != null) {
             name = request.getFirstName().trim();
-        } else {
+        } else if (request.getLastName() != null && request.getFirstName() != null){
             name = request.getFirstName().trim() + " " + request.getLastName().trim();
         }
 
-        Optional<CustomerLoyaltyEntity> customerLoyaltyEntityOptional = customerLoyaltyRepository.findByCustomerNameAndCustomerPhoneAndFirstByOrderByDiscountedDateDsc(name, request.getCustomerPhone());
+        if (request.getCustomerPhone().isEmpty()) {
+            request.setCustomerPhone(null);
+        }
+
+        Optional<CustomerLoyaltyEntity> customerLoyaltyEntityOptional = customerLoyaltyRepository.findByCustomerNameOrCustomerPhoneAndFirstByOrderByDiscountedDateDsc(name, request.getCustomerPhone());
 
         Date lastDiscountedDate;
 
