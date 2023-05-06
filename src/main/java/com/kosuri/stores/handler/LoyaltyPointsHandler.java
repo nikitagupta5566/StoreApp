@@ -52,14 +52,19 @@ public class LoyaltyPointsHandler {
 
     public void redeemLoyaltyPointsForCustomer(RedeemLoyaltyPointsRequest request) throws Exception {
         CustomerLoyaltyEntity customerLoyaltyEntity = new CustomerLoyaltyEntity();
+        if ((request.getFirstName() == null && request.getLastName() == null && request.getCustomerPhone() == null)
+        || (request.getFirstName()!=null && request.getFirstName().isEmpty() && request.getLastName()!=null && request.getLastName().isEmpty() && request.getCustomerPhone()!=null && request.getCustomerPhone().isEmpty())) {
+            throw new APIException("Please input customer name or phone no");
+        }
 
-        String name;
-        if (request.getFirstName() == null) {
-            name = request.getLastName();
-        } else if (request.getLastName() == null) {
-            name = request.getFirstName();
-        } else {
-            name = request.getFirstName() + " " + request.getLastName();
+
+        String name = null;
+        if (request.getFirstName() == null && request.getLastName() != null) {
+            name = request.getLastName().trim();
+        } else if (request.getLastName() == null && request.getFirstName() != null) {
+            name = request.getFirstName().trim();
+        } else if (request.getLastName() != null && request.getFirstName() != null){
+            name = request.getFirstName().trim() + " " + request.getLastName().trim();
         }
 
         customerLoyaltyEntity.setLoyaltyPoints(request.getLoyaltyPoints());
@@ -77,7 +82,7 @@ public class LoyaltyPointsHandler {
         String name = null;
 
         if ((request.getFirstName() == null && request.getLastName() == null && request.getCustomerPhone() == null)
-        || (request.getFirstName().isEmpty() && request.getLastName().isEmpty() && request.getCustomerPhone().isEmpty())) {
+        || (request.getFirstName()!=null && request.getFirstName().isEmpty() && request.getLastName()!=null && request.getLastName().isEmpty() && request.getCustomerPhone()!=null && request.getCustomerPhone().isEmpty())) {
             throw new APIException("Please input customer name or phone no");
         }
 
