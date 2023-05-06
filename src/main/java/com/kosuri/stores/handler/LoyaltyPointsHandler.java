@@ -52,8 +52,9 @@ public class LoyaltyPointsHandler {
 
     public void redeemLoyaltyPointsForCustomer(RedeemLoyaltyPointsRequest request) throws Exception {
         CustomerLoyaltyEntity customerLoyaltyEntity = new CustomerLoyaltyEntity();
-        if ((request.getFirstName() == null && request.getLastName() == null && request.getCustomerPhone() == null)
-        || (request.getFirstName()!=null && request.getFirstName().isEmpty() && request.getLastName()!=null && request.getLastName().isEmpty() && request.getCustomerPhone()!=null && request.getCustomerPhone().isEmpty())) {
+        if ((request.getFirstName() == null || request.getFirstName().isEmpty())
+                && (request.getLastName() == null || request.getLastName().isEmpty())
+                && (request.getCustomerPhone() == null || request.getCustomerPhone().isEmpty())) {
             throw new APIException("Please input customer name or phone no");
         }
 
@@ -81,8 +82,9 @@ public class LoyaltyPointsHandler {
     public CustomerLoyaltyResponse getDiscountForCustomer(CustomerLoyaltyRequest request) throws Exception {
         String name = null;
 
-        if ((request.getFirstName() == null && request.getLastName() == null && request.getCustomerPhone() == null)
-        || (request.getFirstName()!=null && request.getFirstName().isEmpty() && request.getLastName()!=null && request.getLastName().isEmpty() && request.getCustomerPhone()!=null && request.getCustomerPhone().isEmpty())) {
+        if ((request.getFirstName() == null || request.getFirstName().isEmpty())
+                && (request.getLastName() == null || request.getLastName().isEmpty())
+                && (request.getCustomerPhone() == null || request.getCustomerPhone().isEmpty())) {
             throw new APIException("Please input customer name or phone no");
         }
 
@@ -94,11 +96,20 @@ public class LoyaltyPointsHandler {
             name = request.getFirstName().trim() + " " + request.getLastName().trim();
         }
 
+        if(name.trim().isEmpty()){
+            name = null;
+        }
+
         if (request.getCustomerPhone().isEmpty()) {
             request.setCustomerPhone(null);
         }
 
-        Optional<CustomerLoyaltyEntity> customerLoyaltyEntityOptional = customerLoyaltyRepository.findByCustomerNameOrCustomerPhoneAndFirstByOrderByDiscountedDateDsc(name, request.getCustomerPhone());
+        Optional<CustomerLoyaltyEntity> customerLoyaltyEntityOptional;
+        if(request.getCustomerPhone() != null &&  name != null) {
+            customerLoyaltyEntityOptional = customerLoyaltyRepository.findByCustomerNameAndCustomerPhoneAndFirstByOrderByDiscountedDateDsc(name, request.getCustomerPhone());
+        }else{
+            customerLoyaltyEntityOptional = customerLoyaltyRepository.findByCustomerNameOrCustomerPhoneAndFirstByOrderByDiscountedDateDsc(name, request.getCustomerPhone());
+        }
 
         Date lastDiscountedDate;
 
@@ -115,7 +126,12 @@ public class LoyaltyPointsHandler {
         response.setLastName(request.getLastName());
         response.setPhoneNumber(request.getCustomerPhone());
 
-        Double totalSaleAfterDate = saleRepository.findTotalSalesForCustomerAfterDate(name, lastDiscountedDate);
+        Double totalSaleAfterDate;
+        if(request.getCustomerPhone() != null &&  name != null) {
+            totalSaleAfterDate = saleRepository.findTotalSalesForCustomerPhoneAndNameAfterDate(request.getCustomerPhone(), name, lastDiscountedDate);
+        }else{
+            totalSaleAfterDate = saleRepository.findTotalSalesForCustomerPhoneOrNameAfterDate(request.getCustomerPhone(), name, lastDiscountedDate);
+        }
 
         if (totalSaleAfterDate == null) {
             totalSaleAfterDate = 0D;
