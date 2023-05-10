@@ -27,7 +27,7 @@ public class SearchHandler {
         List<SearchResult> searchResultList = new ArrayList<>();
 
         Optional<List<StoreEntity>> storeList = storeRepository.findByLocationContaining(location);
-        if (storeList.isPresent() && category.equals("medicine")) {
+        if (storeList.isPresent() && category.equalsIgnoreCase("medicine")) {
             for (StoreEntity storeEntity : storeList.get()) {
                 if (storeEntity.getId().contains("DUMMY")) {
                     continue;
